@@ -1,0 +1,17 @@
+.wrapper {
+	display: flex;
+    align-items: flex-end;
+    font-size: 0.8em;
+}
+
+.click {
+	font-weight: bold;
+	font-style: italic;
+	margin: 0 4px;
+	cursor: pointer;
+}
+
+.icon {
+	width: 18px;
+    margin-left: 5px;
+}

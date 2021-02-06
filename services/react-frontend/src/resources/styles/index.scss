@@ -1,0 +1,19 @@
+@import './reset.scss';
+@import './fonts.scss';
+@import './mixins.scss';
+
+html, body {
+	font-family: Nato;
+	height: 100%;
+	color: #2A2A2A;
+}
+
+#root {
+	display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+* {
+	box-sizing: unset;
+}

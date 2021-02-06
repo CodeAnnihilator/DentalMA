@@ -1,0 +1,71 @@
+.wrapper {
+    min-width: 300px;
+    background-color: #ffffff;
+    color: #3c3c3c;
+    font-size: 0.8em;
+}
+
+.optionWrapper {
+	display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e4e4e4;
+    border-right: 1px solid #e4e4e4;
+    cursor: pointer;
+	&:hover {
+        background-color: #f4f5f7;
+        border-right: none;
+	}
+}
+
+.optionIcon {
+	width: 22px;
+    padding: 7px;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    margin-right: 15px;
+}
+
+.textWrapper {
+	flex: 1;
+	font-size: 0.9em;
+}
+
+.text {
+	text-transform: uppercase;
+    margin-bottom: 2px;
+    font-family: 'Nato Bold';
+}
+
+.statusIcon {
+	width: 24px;
+}
+
+.disabledOption {
+	&:hover {
+		cursor: not-allowed;
+		background-color: #ffffff;
+		border-right: 1px solid #e4e4e4;
+	}
+}
+
+.disabledIcon {
+	opacity: 0.5;
+}
+
+.title {
+	display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    border-bottom: 1px solid #e4e4e4;
+    border-right: 1px solid #e4e4e4;
+    text-transform: capitalize;
+}
+
+.activeBg {
+    background-color: #f4f5f7;
+    cursor: not-allowed;
+    border-right: none;
+}

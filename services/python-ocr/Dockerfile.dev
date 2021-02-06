@@ -1,0 +1,16 @@
+FROM continuumio/miniconda3
+
+WORKDIR /usr/src/app
+
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6 tesseract-ocr libtesseract-dev -y
+
+RUN conda config --add channels conda-forge
+RUN conda install -c conda-forge pytesseract opencv
+RUN conda install -c anaconda numpy flask pillow werkzeug flask-cors
+
+COPY . /usr/src/app
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]

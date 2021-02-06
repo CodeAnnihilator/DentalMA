@@ -1,0 +1,20 @@
+.wrapper {
+	display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.label {
+	font-size: 0.7em;
+    padding: 10px;
+    text-transform: capitalize;
+    font-family: 'Nato Bold';
+}
+
+.select {
+    padding: 15px;
+    border-radius: 4px;
+    background-color: #f4f5f7;
+    min-width: 200px;
+	border: 1px solid #dfdfdf;
+}

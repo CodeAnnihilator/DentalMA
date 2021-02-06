@@ -1,0 +1,30 @@
+.wrapper {
+	display: flex;
+    flex-direction: column;
+    flex: 1;
+    background-color: #F4F5F7;
+}
+
+.ticks {
+    display: flex;
+    flex: 1;
+    :first-child {
+        padding-left: 0;
+    }
+}
+
+.marks {
+    display: flex;
+    margin: 0 20px;
+    font-size: 0.8em;
+}
+
+.mark {
+    &:first-child {
+        margin-right: 10px;
+    }
+}
+
+.markValue {
+    font-family: Nato Bold;
+}

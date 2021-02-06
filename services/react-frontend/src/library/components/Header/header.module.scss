@@ -1,0 +1,26 @@
+.wrapper {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 0;
+    border-bottom: 1px solid #DFDFDF;
+}
+
+.innerWrapper {
+	display: flex;
+	cursor: pointer;
+}
+
+.img {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.appName {
+	font-size: 1.1em;
+}
+
+.appDesc {
+    font-size: 0.8em;
+}

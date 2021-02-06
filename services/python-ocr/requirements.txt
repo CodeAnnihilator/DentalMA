@@ -1,0 +1,7 @@
+Flask==1.1.2
+pillow>=8.0.1
+pytesseract==0.3.7
+werkzeug==1.0.1
+opencv-python~=4.4.0.46
+numpy~=1.19.4
+uWSGI==2.0.17.1

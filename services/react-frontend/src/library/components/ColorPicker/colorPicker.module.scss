@@ -1,0 +1,72 @@
+.wrapper {
+    min-width: 300px;
+    background-color: #ffffff;
+    color: #3c3c3c;
+    font-size: 0.8em;
+}
+
+.header {
+    background-color: #f4f5f7;
+    line-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.optionWrapper {
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e4e4e4;
+    border-right: 1px solid #e4e4e4;
+    cursor: pointer;
+	&:hover {
+        background-color: #f4f5f7;
+        border-right: none;
+	}
+}
+
+.activeBg {
+    background-color: #f4f5f7;
+    cursor: not-allowed;
+    border-right: none;
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 16px;
+    margin: 30px;
+}
+
+.text {
+    display: flex;
+    flex: 1;
+}
+
+.pick {
+    padding: 4px 10px;
+    border: 1px solid #979797;
+    border-radius: 16px;
+    font-size: 0.8em;
+    margin-right: 30px;
+}
+
+.selected {
+    padding: 4px 10px;
+    border: 1px dashed #6B6B6B;
+    border-radius: 16px;
+    font-size: 0.8em;
+    margin-right: 30px;
+}
+
+.title {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    border-bottom: 1px solid #e4e4e4;
+    border-right: 1px solid #e4e4e4;
+    text-transform: capitalize;
+}

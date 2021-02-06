@@ -1,0 +1,57 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.switch {
+	margin-left: 15px;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    height: 100%;
+    padding-right: 20px;
+    border-right: 1px solid #dfdfdf;
+}
+
+.label {
+	margin-left: 10px;
+    font-size: 0.8em;
+}
+
+.outputWrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.output {
+    height: 900px;
+}
+
+.pictureButtonWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.pictureName {
+    margin-right: 10px;
+    font-size: 0.7em;
+}
+
+.img {
+    z-index: 1;
+    user-select: none;
+    position: absolute;
+    max-width: 95%;
+    max-height: 95%;
+    height: auto;
+    object-fit: contain;
+}

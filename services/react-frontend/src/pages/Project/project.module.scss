@@ -1,0 +1,15 @@
+.wrapper {
+	display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.buttons {
+    display: flex;
+    & div {
+        margin-left: 5px;
+    }
+    &:first-child div {
+        margin-left: none;
+    }
+}

@@ -1,0 +1,53 @@
+.wrapper {
+    position: relative;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background-color: #F4F5F7;
+}
+
+.innerWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.table {
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: white;
+    cursor: pointer;
+}
+
+.table td, .table th {
+    text-align: center;
+    padding: 8px;
+}
+
+.table td {
+	line-height: 30px;
+    font-size: 0.7em;
+}
+
+.table thead th {
+    background: #F4F5F7;
+	font-size: 0.8em;
+	text-transform: capitalize;
+	line-height: 30px;
+}
+
+.table tbody tr {
+	&:hover {
+		background-color: #fdfff7;
+	}
+}
+
+.table tr {
+   border-bottom: 1px solid #DFDFDF;
+}

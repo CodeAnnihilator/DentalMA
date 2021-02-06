@@ -1,0 +1,26 @@
+.wrapper {
+	display: flex;
+    align-items: center;
+    font-size: 0.8em;
+    text-transform: capitalize;
+    padding: 0 25px;
+    height: 100%;
+	border-right: 1px solid #dfdfdf;
+	cursor: pointer;
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.active {
+	font-weight: bold;
+	&:hover {
+		text-decoration: none;
+		cursor: not-allowed;
+	}
+}
+
+.icon {
+    width: 24px;
+    margin-right: 10px;
+}

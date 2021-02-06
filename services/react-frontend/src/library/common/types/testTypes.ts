@@ -1,0 +1,4 @@
+export enum TestTypes {
+	TEST_ACTION = '@@TEST/TEST_ACTION',
+	TEST_ACTION_WITH_DATA = '@@test/TEST_ACTION_WITH_DATA',
+}

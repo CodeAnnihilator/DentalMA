@@ -1,0 +1,71 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:13.1
+    container_name: dental-ma-postgres-prod
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_DB=dental_ma_prod
+    volumes:
+      - postgresql-data-prod:/var/lib/postgresql/data
+    networks:
+      - postgres
+  pgadmin:
+    image: dpage/pgadmin4:4.19
+    container_name: dental-ma-pgadmin-prod
+    restart: always
+    volumes:
+      - pgadmin-data-prod:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - '5050:5050'
+    depends_on:
+      - postgres
+    networks:
+      - postgres
+    tty: true
+  node-backend:
+    build:
+      context: ./services/node-backend
+      dockerfile: Dockerfile.prod
+    container_name: dental-ma-node-backend-prod
+    # command: "npn run migrate && npm run pm2" // later to seed data
+    ports:
+      - '9000:9000'
+    depends_on:
+      - postgres
+  frontend:
+    build:
+      context: ./services/react-frontend
+      dockerfile: Dockerfile.prod
+    container_name: dental-ma-frontend-prod
+    depends_on: 
+      - node-backend
+    ports:
+      - '3000:3000'
+  python-ocr:
+    build:
+      context: ./services/python-ocr
+      dockerfile: Dockerfile.prod
+    container_name: dental-ma-python-ocr-prod
+    ports:
+      - '5000:5000'
+    depends_on:
+      - 'node-backend'
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgresql-data-prod:
+  pgadmin-data-prod:
+  

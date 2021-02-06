@@ -1,0 +1,86 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:13.1
+    container_name: dental-ma-postgres-dev
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_DB=dental_ma_dev
+    volumes:
+      - postgresql-data-dev:/var/lib/postgresql/data
+    networks:
+      - postgres
+  pgadmin:
+    image: dpage/pgadmin4:4.19
+    container_name: dental-ma-pgadmin-dev
+    restart: always
+    volumes:
+      - pgadmin-data-dev:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - '5050:5050'
+    depends_on:
+      - 'postgres'
+    networks:
+      - postgres
+    tty: true
+  node-backend:
+    build:
+      context: ./services/node-backend
+      dockerfile: Dockerfile.dev
+    container_name: dental-ma-node-backend-dev
+    environment:
+      CHOKIDAR_USEPOLLING: 'true'
+    # command: 'npn run migrate && npm run pm2' // later to seed data
+    ports:
+      - '9000:9000'
+    depends_on:
+      - 'postgres'
+    volumes:
+      - /usr/src/app/node_modules
+      - ./services/node-backend:/usr/src/app
+  frontend:
+    build:
+      context: ./services/react-frontend
+      dockerfile: Dockerfile.dev
+    container_name: dental-ma-frontend-dev
+    environment:
+      CHOKIDAR_USEPOLLING: 'true'
+    depends_on: 
+      - 'ocr'
+    volumes:
+      - /usr/src/app/node_modules
+      - ./services/react-frontend:/usr/src/app
+    ports:
+      - '3000:3000'
+  python-ocr:
+    build:
+      context: ./services/python-ocr
+      dockerfile: Dockerfile.dev
+    container_name: dental-ma-python-ocr-dev
+    environment:
+      FLASK_DEBUG: 1
+      FLASK_APP: ./services/python-ocr/app.py
+    volumes:
+      - ./services/python-ocr:/usr/src/app
+    ports:
+      - '5000:5000'
+    depends_on:
+      - 'node-backend'
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgresql-data-dev:
+  pgadmin-data-dev:
+  
