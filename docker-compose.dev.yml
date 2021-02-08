@@ -39,14 +39,16 @@ services:
     container_name: dental-ma-node-backend-dev
     environment:
       CHOKIDAR_USEPOLLING: 'true'
-    # command: 'npn run migrate && npm run pm2' // later to seed data
     ports:
       - '9000:9000'
     depends_on:
       - 'postgres'
+      - 'pgadmin'
     volumes:
       - /usr/src/app/node_modules
       - ./services/node-backend:/usr/src/app
+    networks:
+      - postgres
   frontend:
     build:
       context: ./services/react-frontend
@@ -55,7 +57,7 @@ services:
     environment:
       CHOKIDAR_USEPOLLING: 'true'
     depends_on: 
-      - 'ocr'
+      - 'python-ocr'
     volumes:
       - /usr/src/app/node_modules
       - ./services/react-frontend:/usr/src/app

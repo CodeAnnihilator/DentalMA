@@ -37,7 +37,6 @@ services:
       context: ./services/node-backend
       dockerfile: Dockerfile.prod
     container_name: dental-ma-node-backend-prod
-    # command: "npn run migrate && npm run pm2" // later to seed data
     ports:
       - '9000:9000'
     depends_on:

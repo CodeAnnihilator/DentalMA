@@ -1,7 +1,8 @@
 FROM node:14
 WORKDIR /usr/src/app
 COPY package*.json ./
+RUN npm install -g sequelize-cli
 RUN yarn
 COPY . .
 EXPOSE 9000
-CMD [ "yarn", "pm2" ]
+CMD [ "yarn", "pm2", "&&", "sequelize", "db:seed:all" ]

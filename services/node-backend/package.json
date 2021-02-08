@@ -22,12 +22,24 @@
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
+    "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.5.1",
     "@nestjs/platform-express": "^7.5.1",
+    "@nestjs/sequelize": "^0.2.0",
+    "@types/sequelize": "^4.28.9",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "global": "^4.4.0",
+    "mysql2": "^2.2.5",
+    "nestjs-sequelize-seeder": "^1.1.4",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
     "pm2": "^4.5.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.3",
+    "sequelize": "^6.5.0",
+    "sequelize-typescript": "^2.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.1",
