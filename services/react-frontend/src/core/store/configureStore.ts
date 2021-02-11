@@ -2,17 +2,21 @@ import createSagaMiddleware from 'redux-saga';
 import {StateType} from 'typesafe-actions';
 import {createStore, applyMiddleware} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import { routerMiddleware } from 'connected-react-router'
 
 import createCoreReducer from '../coreReducer';
 import coreSaga from '../coreSaga';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const middlewares = composeWithDevTools(
-	applyMiddleware(sagaMiddleware),
-);
-
 export const history = require('history').createBrowserHistory();
+
+const middlewares = composeWithDevTools(
+	applyMiddleware(
+		routerMiddleware(history),
+		sagaMiddleware,
+	),
+);
 
 const coreReducer = createCoreReducer(history);
 

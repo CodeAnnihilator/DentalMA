@@ -1,4 +1,5 @@
 import {call, put, select, takeLatest} from 'redux-saga/effects';
+import {push} from 'connected-react-router';
 
 import {getIsUser} from '../selectors/authSelectors';
 
@@ -32,6 +33,7 @@ import {
 	deleteProject,
 	deleteProjectSuccess
 } from '../actions/projectActions';
+
 import IProject from '../interfaces/projects';
 
 function* createProjectSaga(action: ReturnType<typeof createProject>) {
@@ -89,13 +91,14 @@ function* editProjectNameSaga(action: ReturnType<typeof editProjectName>) {
 function* deleteProjectSaga(action: ReturnType<typeof deleteProject>) {
 	try {
 		const project = yield select(getCurrentProject);
-		const projects = yield select(getProjects)
+		const projects = yield select(getProjects);
 		const isRemoved = yield call(() => deleteProjectRequest(project.id));
 		if (isRemoved) {
 			const projectsToUpdate = projects.filter((p: IProject) => p.id !== project.id);
 			yield put(deleteProjectSuccess(project.id));
 			yield put(requestProjectsSuccess(projectsToUpdate));
 		}
+		yield put(push('/projects'))
 	} catch (error) {
 		console.log(error);
 	}

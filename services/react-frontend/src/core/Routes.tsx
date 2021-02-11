@@ -3,13 +3,12 @@ import React, { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import Header from 'library/components/Header';
+import BreadcrumbsContainer from 'library/components/Breadcrumbs/BreadcrumbsContainer';
+import SubHeader from 'library/components/SubHeader';
 
 import ProjectsContainer from 'pages/Projects/ProjectsContainer';
 import ProjectContainer from 'pages/Project/ProjectContainer';
 import Measurement from 'pages/Measurement';
-
-import BreadcrumbsContainer from 'library/components/Breadcrumbs/BreadcrumbsContainer';
-import SubHeader from 'library/components/SubHeader';
 
 interface IRoutes {
 	isUser: null | object;

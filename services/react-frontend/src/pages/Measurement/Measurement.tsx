@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
+
 import Tabs from 'library/components/Tabs';
-
 import SubHeader from 'library/components/SubHeader';
-
-import styles from './measurement.module.scss';
 
 import Measurement from './Frames/Measurement';
 import Settings from './Frames/Settings';
+
+import styles from './measurement.module.scss';
 
 const Measurements = () => {
 

@@ -12,12 +12,17 @@ const ModalContent = ({
 	onConfirm,
 	headerMessage,
 	bodyMessage,
-}: IModalContent) => {
-	return (
-		<div onClick={onClose} className={styles.wrapper}>
-			<div className={styles.innerWrapper} onClick={onClose}>asdasd</div>
+}: IModalContent) => (
+	<div onClick={onClose} className={styles.wrapper}>
+		<div className={styles.innerWrapper}>
+			<div className={styles.header}>{headerMessage}</div>
+			<div className={styles.message}>{bodyMessage}</div>
+			<div className={styles.controls}>
+				<div onClick={onClose}>cancel</div>
+				<div onClick={onConfirm}>confirm</div>
+			</div>
 		</div>
-	)
-}
+	</div>
+)
 
 export default ModalContent;
