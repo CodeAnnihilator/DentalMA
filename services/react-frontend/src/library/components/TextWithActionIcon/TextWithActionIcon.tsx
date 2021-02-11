@@ -12,25 +12,25 @@ import EditSVG from 'resources/icons/edit.svg';
 import styles from './textWithActionIcon.module.scss';
 
 interface ITextWithActionIcon {
-	text?: string;
+	value?: string;
 	isNew?: boolean;
 	placeholder?: string;
 	onRemove?: any;
 	onConfirm: (value: string) => void;
 }
 
-const initialState = {
-	isEditing: false,
-	value: ''
-};
-
 const TextWithActionIcon = ({
-	text,
 	isNew = false,
+	value = '',
 	placeholder,
 	onConfirm,
 	onRemove,
 }: ITextWithActionIcon) => {
+
+	const initialState = {
+		isEditing: false,
+		value
+	};
 
 	const [state, setState] = useObjectState(initialState);
 
@@ -47,16 +47,14 @@ const TextWithActionIcon = ({
 	return (
 		<div className={styles.wrapper}>
 			{
-				!state.isEditing
-					? text
-					: (
-						<input
-							className={styles.input}
-							value={state.value}
-							placeholder={placeholder}
-							onChange={e => setState({value: e.target.value})}
-						/>
-					)
+				state.isEditing && (
+					<input
+						className={styles.input}
+						value={state.value}
+						placeholder={placeholder}
+						onChange={e => setState({value: e.target.value})}
+					/>
+				)
 			}
 			{
 				!state.isEditing && (

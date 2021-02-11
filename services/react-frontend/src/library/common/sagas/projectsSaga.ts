@@ -5,9 +5,17 @@ import {getIsUser} from '../selectors/authSelectors';
 import {ProjectTypes} from '../types/projectTypes';
 
 import {
+	getCurrentProject,
+	getProjects,
+} from '../selectors/projectSelectors';
+
+import {
 	createProjectRequest,
 	getProjectsRequest,
+	getProjectByIdRequest,
 	getMeasurementsRequest,
+	editProjectRequest,
+	deleteProjectRequest,
 } from '../apis/projects';
 
 import {
@@ -15,9 +23,16 @@ import {
 	createProjectSuccess,
 	requestProjects,
 	requestProjectsSuccess,
+	requestProjectById,
+	requestProjectByIdSuccess,
 	requestMeasurements,
 	requestMeasurementsSuccess,
+	editProjectName,
+	editProjectNameSuccess,
+	deleteProject,
+	deleteProjectSuccess
 } from '../actions/projectActions';
+import IProject from '../interfaces/projects';
 
 function* createProjectSaga(action: ReturnType<typeof createProject>) {
 	try {
@@ -48,8 +63,49 @@ function* requestMeasurementsSaga(action: ReturnType<typeof requestMeasurements>
 	}
 }
 
+function* requestProjectByIdSaga(action: ReturnType<typeof requestProjectById>) {
+	try {
+		const {data: project} = yield call(() => getProjectByIdRequest(action.payload));
+		yield put(requestProjectByIdSuccess(project));
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+function* editProjectNameSaga(action: ReturnType<typeof editProjectName>) {
+	try {
+		const project = yield select(getCurrentProject);
+		const projects = yield select(getProjects)
+		const projectToUpdate = Object.assign(project, {name: action.payload})
+		const {data: updatedProject} = yield call(() => editProjectRequest(projectToUpdate));
+		const projectsToUpdate = projects.map((p: IProject) => p.id === project.id ? updatedProject : p);
+		yield put(editProjectNameSuccess(updatedProject));
+		yield put(requestProjectsSuccess(projectsToUpdate));
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+function* deleteProjectSaga(action: ReturnType<typeof deleteProject>) {
+	try {
+		const project = yield select(getCurrentProject);
+		const projects = yield select(getProjects)
+		const isRemoved = yield call(() => deleteProjectRequest(project.id));
+		if (isRemoved) {
+			const projectsToUpdate = projects.filter((p: IProject) => p.id !== project.id);
+			yield put(deleteProjectSuccess(project.id));
+			yield put(requestProjectsSuccess(projectsToUpdate));
+		}
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 export default function* watchProjects() {
 	yield takeLatest(ProjectTypes.CREATE_PROJECT, createProjectSaga);
 	yield takeLatest(ProjectTypes.REQUEST_PROJECTS, requestProjectsSaga);
 	yield takeLatest(ProjectTypes.REQUEST_MEASUREMENTS, requestMeasurementsSaga);
+	yield takeLatest(ProjectTypes.REQUEST_PROJECT_BY_ID, requestProjectByIdSaga);
+	yield takeLatest(ProjectTypes.EDIT_PROJECT_NAME, editProjectNameSaga);
+	yield takeLatest(ProjectTypes.DELETE_PROJECT, deleteProjectSaga);
 }

@@ -22,4 +22,15 @@ export class ProjectsService {
     return await this.projectRepository
       .findOne<Project>({ where: { id } });
   }
+
+  async updateProject(project: ProjectDto): Promise<Project> {
+    return await this.projectRepository
+      .update<Project>(project, { where: { id: project.id } })
+      .then(async (_) => await this.getProjectById(project.id))
+  }
+
+  async deleteProject(id: number): Promise<number> {
+    return await this.projectRepository
+      .destroy<Project>({ where: { id } });
+  }
 }
