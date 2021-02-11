@@ -15,7 +15,7 @@ const Button = ({
 	onClick,
 	icon,
 	color = 'blue',
-	disabled
+	disabled,
 }: IButton) => (
 	<div onClick={onClick} className={styles.wrapper} style={{backgroundColor: disabled ? 'silver' : color}}>
 		{text}

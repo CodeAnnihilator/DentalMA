@@ -64,55 +64,55 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # cv2.imshow('Frame', opening)
 # cv2.waitKey(0)
 
-@app.route('/api/v1/live-check', methods=['GET'])
-def test():
+# @app.route('/api/v1/live-check', methods=['GET'])
+# def test():
 
-  img = cv2.imread('4.png')
+#   img = cv2.imread('4.png')
 
-  img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#   img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-  thresh = cv2.threshold(img_grey, 200, 255, cv2.THRESH_BINARY_INV)[1]
-  kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
-  opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
+#   thresh = cv2.threshold(img_grey, 200, 255, cv2.THRESH_BINARY_INV)[1]
+#   kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
+#   opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
 
-  boxes = pytesseract.image_to_data(thresh, config='digits')
+#   boxes = pytesseract.image_to_data(thresh, config='digits')
 
-  r = None
+#   r = None
 
-  for x, b in enumerate(boxes.splitlines()):
-      b = b.split('	')
-      if x != 0 and b[10] != '-1':
-          r = b[11]
-
-  return str(r)
-
-# @app.route('/api/v1/detect-magnification', methods=['POST'])
-# def detect_magnification():
-#   if request.method == 'POST':
-
-#     f = request.form['file']
-
-#     file = Image.open(BytesIO(base64.b64decode(f.split(',')[1])))
-
-#     filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'test.png')
-#     file.save(filepath)
-
-#     img = cv2.imread(filepath)
-
-#     thresh = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY_INV)[1]
-#     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
-#     opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
-
-#     boxes = pytesseract.image_to_data(opening, config='digits')
-
-#     r = None
-
-#     for x, b in enumerate(boxes.splitlines()):
+#   for x, b in enumerate(boxes.splitlines()):
 #       b = b.split('	')
 #       if x != 0 and b[10] != '-1':
-#         r = b[11]
+#           r = b[11]
 
-#     return r
+#   return str(r)
+
+@app.route('/api/v1/detect-magnification', methods=['POST'])
+def detect_magnification():
+  if request.method == 'POST':
+
+    f = request.form['file']
+
+    file = Image.open(BytesIO(base64.b64decode(f.split(',')[1])))
+
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'test.png')
+    file.save(filepath)
+
+    img = cv2.imread(filepath)
+
+    thresh = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY_INV)[1]
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
+    opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
+
+    boxes = pytesseract.image_to_data(opening, config='digits')
+
+    r = None
+
+    for x, b in enumerate(boxes.splitlines()):
+      b = b.split('	')
+      if x != 0 and b[10] != '-1':
+        r = b[11]
+
+    return r
 
 
 if __name__ == '__main__':

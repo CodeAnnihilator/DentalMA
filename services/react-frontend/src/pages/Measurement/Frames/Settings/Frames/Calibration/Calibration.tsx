@@ -6,7 +6,7 @@ import MeasurementPNG from 'resources/icons/measurement.png';
 import SelectionSVG from 'resources/icons/selection.svg';
 import DeleteSVG from 'resources/icons/delete.svg';
 
-import {fetch} from 'library/utilities/fetch';
+import {ocrFetch} from 'library/utilities/fetch';
 
 import styles from './calibration.module.scss';
 
@@ -38,13 +38,13 @@ const Calibration = () => {
 				const context1 = canvasCropRef.current.getContext('2d');
 				canvas1.width = 600;
 				canvas1.height = 140;
-				var imgData = context.getImageData(400, 100, 600, 140);
+				var imgData = context.getImageData(400, 100, 300, 140);
 				if (context1) context1.putImageData(imgData, 0, 0);
 				const file = canvas1.toDataURL('image/png');
 				console.log(file)
 				let formData = new FormData();
 				formData.set('file', file);
-				const res = await fetch.post('/detect-magnification', formData, {
+				const res = await ocrFetch.post('/detect-magnification', formData, {
 					headers: {
 						'content-type': 'multipart/form-data',
 						'Access-Control-Allow-Origin': '*'

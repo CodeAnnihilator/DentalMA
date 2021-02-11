@@ -19,18 +19,43 @@ const setLabel = (sub: string, index: number) => {
 	return sub;
 };
 
-const Breadcrumbs = () => {
+interface IBreadcrumbs {
+	createProject: (text: string) => void;
+}
+
+const Breadcrumbs = ({
+	createProject,
+}: IBreadcrumbs) => {
 
 	const history = useHistory();
 
 	const {pathname} = useLocation();
 
-	const splittedPath = pathname.split('/').filter(sub => sub !== '');
+	const splittedRoutePath = pathname.split('/').filter(sub => sub !== '');
+
+	const routeRenderType = () => {
+		const p = splittedRoutePath;
+		const projectsPath = p.length === 1 && p[0] === 'projects';
+		const projectPath = p.length === 2 && p[0] === 'projects';
+		if (projectsPath) return 'newProject';
+		if (projectPath) return 'currentProject';
+		return 'projectMeasurement';
+
+	};
+
+	const type = routeRenderType();
+	const currentIndex = splittedRoutePath[splittedRoutePath.length - 1];
+
+	const onCreateNewProject = (value: string) => createProject(value);
+	const onEditProjectName = (value: string) => console.log('edit project name: ' + value);
+	const onRemoveProject = () => console.log('remove project' + currentIndex);
+	const onEditMeasurementName = (value: string) => console.log('edit measurement name: ' + value);
+	const onRemoveMeasurement = () => console.log('remove measurement' + currentIndex);
 
 	return (
 		<div className={styles.wrapper}>
 			{
-				splittedPath.map((sub, index, arr) => (
+				splittedRoutePath.map((sub, index, arr) => (
 					<div
 						key={index}
 						className={cn(styles.navEl, {[styles.current]: !arr[index + 1]})}
@@ -40,11 +65,31 @@ const Breadcrumbs = () => {
 						<div className={styles.el}>
 							<img alt='' className={styles.img} src={index === 2 ? fileSVG : folderSVG} />
 							<span className={cn({[styles.notLast]: arr[index + 1]})}>{setLabel(sub, index)}</span>
-							{ !arr[index + 1] && <TextWithActionIcon isNew={!index} />}
 						</div>
 					</div>
 				))
 			}
+			{type === 'newProject' && (
+				<TextWithActionIcon
+					isNew={true}
+					placeholder='create new project'
+					onConfirm={onCreateNewProject}
+				/>
+			)}
+			{type === 'currentProject' && (
+				<TextWithActionIcon
+					placeholder='edit project name'
+					onConfirm={onEditProjectName}
+					onRemove={onRemoveProject}
+				/>
+			)}
+			{type === 'projectMeasurement' && (
+				<TextWithActionIcon
+					placeholder='edit measurement name'
+					onConfirm={onEditMeasurementName}
+					onRemove={onRemoveMeasurement}
+				/>
+			)}
 		</div>
 	);
 };

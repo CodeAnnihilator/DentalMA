@@ -5,4 +5,4 @@ RUN npm install -g sequelize-cli
 RUN yarn
 COPY . .
 EXPOSE 9000
-CMD ["sh", "-c", "sequelize db:seed:all && yarn start:dev"]
+CMD ["yarn", "start:dev"]

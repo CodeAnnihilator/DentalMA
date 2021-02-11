@@ -6,7 +6,7 @@ import {ConnectedRouter} from 'connected-react-router';
 import configureStore, {history} from 'core/store/configureStore';
 import configureI18n from 'core/i18n/configureI18n';
 
-import Routes from 'core/Routes';
+import RoutesContainer from 'core/RoutesContainer';
 
 import 'resources/styles/index.scss';
 
@@ -15,7 +15,7 @@ async function render() {
 	ReactDOM.render((
 			<Provider store={configureStore()}>
 				<ConnectedRouter history={history}>
-					<Routes />
+					<RoutesContainer />
 				</ConnectedRouter>
 			</Provider>
 		),

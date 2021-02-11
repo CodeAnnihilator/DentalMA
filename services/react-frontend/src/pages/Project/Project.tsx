@@ -1,52 +1,46 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import {useHistory} from 'react-router-dom';
 
-import SubHeader from 'library/components/SubHeader';
 import Table from 'library/components/Table';
-import TextWithActionIcon from 'library/components/TextWithActionIcon';
-import Button from 'library/components/Button';
 // import SteppedProgress from 'library/components/SteppedProgress';
-
-import ExcelSVG from 'resources/icons/excel.svg';
-import DesignSVG from 'resources/icons/design.svg';
 
 import styles from './project.module.scss';
 
-const table = {
-	head: ['id', 'name', 'created at', 'updated at', 'margins', 'group', 'tooth', 'time'],
-	data: [
-		[0, 'Measurement #22222', '21.01.2025', '25.05.2025', 2, 4, 5],
-		[15, 'Measurement #22222', '21.01.2025', '25.05.2025', 2, 4, 5],
-		[18, 'Measurement #22222', '21.01.2025', '25.05.2025', 2, 4, 5],
-		[22, 'Measurement #22222', '21.01.2025', '25.05.2025', 2, 4, 5],
-		[25, 'Measurement #22222', '21.01.2025', '25.05.2025', 2, 4, 5],
-	],
-};
+interface IMeasurements {
+	measurements: object[];
+	requestMeasurements: (projectId: number) => void;
+	match: any;
+}
 
-const getProjectByRoute = (path: string) => {
-	const pathArr = path.split('/');
-	const projectId = pathArr[pathArr.length - 1];
+const Project = ({
+	measurements,
+	requestMeasurements,
+	...props
+}: IMeasurements) => {
 
-	return `Project #${projectId}`;
-};
-
-const Projects = () => {
+	useEffect(() => {
+		const projectId = props.match.params.projectId;
+		requestMeasurements(projectId);
+	}, [])
 
 	const history = useHistory();
-
 	const path = history.location.pathname;
 
 	const onRowClick = (id: number) => history.push(`${path}/${id}`);
 
+	const tHead = measurements.length ? Object.keys(measurements[0]) : [];
+	const tData = measurements.map((project: object) => Object.values(project));
+
 	return (
 		<div className={styles.wrapper}>
 			<Table
-				head={table.head}
-				data={table.data}
+				head={tHead}
+				data={tData}
 				onRowClick={onRowClick}
 			/>
 		</div>
 	);
 };
 
-export default Projects;
+export default Project;
