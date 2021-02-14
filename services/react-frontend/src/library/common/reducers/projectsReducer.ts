@@ -27,7 +27,7 @@ export default (state = initialState, action: ProjectsActions): ProjectsState =>
 		case getType(actions.createProjectSuccess):
 			return {
 				...state,
-				data: [...state.data, action.payload] as IProject[],
+				data: [action.payload, ...state.data] as IProject[],
 			};
 
 		case getType(actions.requestProjectsSuccess):
