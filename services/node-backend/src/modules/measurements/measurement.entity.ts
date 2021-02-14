@@ -5,11 +5,7 @@ import { Analysis } from '../analysis/analysis.entity';
 @Table
 export class Measurement extends Model {
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-    unique: true,
-  })
+  @Column
   name: string;
 
   @Column

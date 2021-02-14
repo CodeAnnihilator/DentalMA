@@ -6,7 +6,7 @@ import Parameters from './Frames/Parameters';
 
 import SettingsSVG from 'resources/icons/settings.svg';
 import Camera1SVG from 'resources/icons/camera1.svg';
-import Design1SVG from 'resources/icons/design1.svg';
+import Design1SVG from 'resources/icons/measurement.svg';
 
 import styles from './settings.module.scss';
 import Output from './Frames/Output';

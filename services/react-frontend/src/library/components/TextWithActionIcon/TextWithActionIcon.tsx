@@ -36,12 +36,12 @@ const TextWithActionIcon = ({
 
 	const onHandleConfirm = () => {
 		onConfirm(state.value);
-		setState(initialState);
+		setState({isEditing: false});
 	}
 
 	const onHandleRemove = () => {
 		onRemove();
-		setState(initialState);
+		setState({isEditing: false});
 	}
 	
 	return (
