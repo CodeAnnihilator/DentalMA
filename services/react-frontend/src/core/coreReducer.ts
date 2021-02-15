@@ -6,6 +6,7 @@ import authReducer from 'library/common/reducers/authReducer';
 import projectsReducer from 'library/common/reducers/projectsReducer';
 import measurementsReducer from 'library/common/reducers/measurementsReducer';
 import measurementReducer from 'library/common/reducers/measurementReducer';
+import settingsReducer from 'library/common/reducers/settingsReducer';
 
 const createCoreReducer = (history: any) => combineReducers({
 	router: connectRouter(history),
@@ -14,6 +15,7 @@ const createCoreReducer = (history: any) => combineReducers({
 	projects: projectsReducer,
 	project: measurementsReducer,
 	measurement: measurementReducer,
+	settings: settingsReducer,
 });
 
 export default createCoreReducer;

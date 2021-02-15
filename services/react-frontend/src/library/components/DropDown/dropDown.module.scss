@@ -1,0 +1,30 @@
+.wrapper {
+	cursor: pointer;
+	position: relative;
+    margin: 0 5px;
+}
+
+.active {
+    display: flex;
+    font-size: 0.8em;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid silver;
+    border-radius: 4px;
+    line-height: 16px;
+}
+
+.status {
+	width: 16px;
+}
+
+.arrowDown {
+    width: 10px;
+    border-left: 1px solid silver;
+    padding-left: 5px;
+}
+
+.selected {
+    padding: 0 5px;
+	font-size: 0.9em;
+}

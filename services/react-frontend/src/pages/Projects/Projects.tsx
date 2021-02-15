@@ -28,7 +28,7 @@ const Projects = ({
 
 	const tHead = projects.length ? Object.keys(projects[0]) : [];
 	const tData = projects.map((project: object) => Object.values(project));
-	
+
 	return (
 		<div className={styles.wrapper}>
 			<Table

@@ -9,7 +9,7 @@ import SubHeader from 'library/components/SubHeader';
 
 import ProjectsContainer from 'pages/Projects/ProjectsContainer';
 import ProjectContainer from 'pages/Project/ProjectContainer';
-import Measurement from 'pages/Measurement';
+import MeasurementContainer from 'pages/Measurement/MeasurementContainer';
 import Button from 'library/components/Button';
 
 import MeasurementSVG from 'resources/icons/measurement.svg';
@@ -54,7 +54,7 @@ const Routes: React.FC<IRoutes> = ({
 				<Redirect exact from='/' to='projects' />
 				<Route exact path='/projects' component={ProjectsContainer} />
 				<Route exact path='/projects/:projectId' component={ProjectContainer} />
-				<Route exact path='/projects/:projectId/:measurementId' component={Measurement} />
+				<Route exact path='/projects/:projectId/:measurementId' component={MeasurementContainer} />
 				<Redirect to='/projects' />
 			</Switch>
 		</>
