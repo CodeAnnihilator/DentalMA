@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom'
 
 import LinkedPath from './Frames/LinkedPath';
-
-import ProjectMeasurementContainer from './Frames/LinkedPath/ProjectMeasurement/ProjectMeasurementContainer';
-import CurrentProjectContainer from './Frames/LinkedPath/CurrentProject/CurrentProjectContainer';
-import NewProjectContainer from './Frames/LinkedPath/NewProject/NewProjectContainer';
+import ProjectMeasurementContainer from './Frames/ProjectMeasurement/ProjectMeasurementContainer';
+import CurrentProjectContainer from './Frames/CurrentProject/CurrentProjectContainer';
+import NewProjectContainer from './Frames/NewProject/NewProjectContainer';
 
 import routeRenderType from './utils/routeRenderType';
 

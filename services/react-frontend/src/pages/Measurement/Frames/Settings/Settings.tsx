@@ -1,41 +1,39 @@
-import React, {useState} from 'react';
-
-import OptionPicker from 'library/components/OptionPicker';
-
-import Parameters from './Frames/Parameters';
-
-import SettingsSVG from 'resources/icons/settings.svg';
-import Camera1SVG from 'resources/icons/camera1.svg';
-import Design1SVG from 'resources/icons/measurement.svg';
+import DropDown from 'library/components/DropDown';
+import MetaButton from 'library/components/MetaButton';
 
 import styles from './settings.module.scss';
-import Output from './Frames/Output';
-import Calibration from './Frames/Calibration';
 
+interface ISettings {
+	readySteps: number[];
+	cameras: object[];
+	setActiveCameraId: (cameraId: string) => void;
+}
 
-
-const options = [
-	{icon: SettingsSVG, text: 'meta data', desc: 'initial parameters'},
-	{icon: Camera1SVG, text: 'device info', desc: 'streaming camera' },
-	{icon: Design1SVG, text: 'calibration', desc: 'canvas adjustments'},
-]
-
-const Settings = () => {
-
-	const [activeId, setActiveId] = useState(0);
+const Settings = ({
+	readySteps,
+	cameras,
+	setActiveCameraId
+}: ISettings) => {
+	let settingsLabel = `SETTINGS: ${readySteps[0]}/${readySteps[1]}`;
+	const stepOptions = [{label: settingsLabel, value: 0}, {label: 'MEASUREMENT', value: 1}]
 
 	return (
 		<div className={styles.wrapper}>
-			<OptionPicker
-				title='settings'
-				options={options}
-				activeId={activeId}
-				enabled={[0, 1, 2]}
-				onSelect={setActiveId}
+			<DropDown
+				options={[...stepOptions]}
+				placeholder={settingsLabel}
+				isComplete={false}
+				lockedIndex={1}
 			/>
-			{activeId === 0 && <Parameters />}
-			{activeId === 1 && <Output />}
-			{activeId === 2 && <Calibration />}
+			<DropDown
+				options={cameras}
+				placeholder='select camera...'
+				onSelect={setActiveCameraId}
+			/>
+			<MetaButton label='magnification' />
+			<MetaButton label='calibration' value='200 px' />
+			<MetaButton label='take picture' />
+			<MetaButton label='meta' value='meta' />
 		</div>
 	);
 };

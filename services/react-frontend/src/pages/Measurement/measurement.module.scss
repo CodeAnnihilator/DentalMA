@@ -5,26 +5,21 @@
     background-color: #F4F5F7;
 }
 
-.ticks {
+.outputWrapper {
     display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     flex: 1;
-    :first-child {
-        padding-left: 0;
-    }
+    position: relative;
+    overflow: hidden;
 }
 
-.marks {
-    display: flex;
-    margin: 0 20px;
-    font-size: 0.8em;
-}
-
-.mark {
-    &:first-child {
-        margin-right: 10px;
-    }
-}
-
-.markValue {
-    font-family: Nato Bold;
+.video {
+    z-index: 2;
+    position: absolute;
+    height: auto;
+    object-fit: contain;
+    max-width: 95%;
+    max-height: 95%;
 }
