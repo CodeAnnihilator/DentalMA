@@ -4,10 +4,11 @@ import {useRef, useEffect, useState, BaseSyntheticEvent} from 'react';
 import SubHeader from 'library/components/SubHeader';
 import stopTracks from 'library/utilities/stopTracks';
 
-import Settings from './Frames/Settings/SettingsContainer';
+import SettingsContainer from './Frames/Settings/SettingsContainer';
 
 import handleNextStream from './utils/handleNextStream';
 import handleTakePicture from './utils/handleTakePicture';
+import {getCanvasAndContext, clearCanvas, getNextCoordinate, getOCRCropImage} from './utils/canvas';
 
 import styles from './measurement.module.scss';
 
@@ -19,22 +20,44 @@ interface IMouseEvent extends BaseSyntheticEvent {
 interface IMeasurement {
 	activeStep: number;
 	activeCameraId: string;
+	isCalibrationActive: boolean;
+	calibration: number;
+	pictureLabel: string;
 	saveCameras: (cameras: object[]) => void;
+	requestOCRMeasurement: (measurement: any) => void;
+	setIsCalibrationActive: (isActive: boolean) => void;
 }
 
 const Measurements = ({
 	activeStep,
+	activeCameraId,
+	isCalibrationActive,
+	calibration,
+	pictureLabel,
 	saveCameras,
-	activeCameraId
+	requestOCRMeasurement,
+	setIsCalibrationActive,
 }: IMeasurement) => {
 
 	const refStream = useRef<HTMLVideoElement>(null);
+	const refPicture = useRef<HTMLImageElement>(null);
+	const refPicureCanvas = useRef<HTMLCanvasElement>(null);
 	const refServiceCanvas = useRef<HTMLCanvasElement>(null);
 	const refMeasureCanvas = useRef<HTMLCanvasElement>(null);
 
 	const [stream, setNextStream] = useState(null as any);
 	const [picture, setPicture] = useState(null as any);
-	const [coords, setNextCoord] = useState([] as any);
+	const [mCoords, setNextMCoord] = useState([] as any);
+
+	useEffect(() => {
+		(async function() {
+			if (mCoords.length === 4) {
+				const img = await getOCRCropImage(refPicture, refPicureCanvas, refServiceCanvas, mCoords);
+				requestOCRMeasurement({coords: mCoords, img});
+				setIsCalibrationActive(false);
+			}
+		})()
+	}, [mCoords])
 
 	useEffect(() => {
 		(async () => {
@@ -46,70 +69,65 @@ const Measurements = ({
 		})();
 	}, []);
 
-	useEffect(() => handleSetNextStream(), [activeCameraId]);
+	useEffect(() => {
+		if (!calibration) {
+			setNextMCoord([]);
+			const {canvas} = getCanvasAndContext(refMeasureCanvas);
+			clearCanvas(canvas);
+		};
+	}, [calibration])
 
-	const handleSetNextStream = () => handleNextStream(activeCameraId, refStream, stream, setNextStream)
-	const handleSetTakePicture = () => handleTakePicture(refStream, refServiceCanvas, stream, setPicture)
+	useEffect(() => {
+		handleSetNextStream()
+		handleSetTakePicture()
+	}, [activeCameraId]);
+
+	const handleSetNextStream = () => handleNextStream(activeCameraId, refStream, stream, setNextStream);
+	const handleSetTakePicture = () => handleTakePicture(refStream, refServiceCanvas, stream, setPicture);
 
 	const dimensions = stream ? stream.getTracks()[0].getSettings() : null;
 
-	const getCanvasAndContext = () => {
-		const canvas = refMeasureCanvas.current;
-		const ctx = canvas?.getContext('2d');
-		if (!ctx || !canvas) return {canvas: null, ctx: null};
-
-		return {canvas, ctx};
-	};
-
 	const drawBoundingRect = (ctx: CanvasRenderingContext2D, nextCoord: any) => {
-		const x1 = coords[0];
-		const y1 = coords[1]
-		const w = nextCoord[0] - coords[0];
-		const h = nextCoord[1] - coords[1];
-		ctx.strokeStyle = 'gold';
+		const x1 = mCoords[0];
+		const y1 = mCoords[1]
+		const w = nextCoord[0] - mCoords[0];
+		const h = nextCoord[1] - mCoords[1];
+		ctx.strokeStyle = '#3bff65';
 		ctx.strokeRect(x1, y1, w, h);
 	};
 
-	const getNextCoordinate = (e: IMouseEvent) => {
-		const {canvas} = getCanvasAndContext();
-		if (!canvas) return [];
-		const rect = canvas.getBoundingClientRect();
-		const scaleX = canvas.width / rect.width;
-		const scaleY = canvas.height / rect.height;
-		const x = (e.clientX - rect.left) * scaleX;
-		const y = (e.clientY - rect.top) * scaleY;
-
-		return [x, y] as number[];
-	};
-
-	const clearCanvas = (canvas: HTMLCanvasElement) => {
-		const ctx = canvas?.getContext('2d');
-		if (!ctx || !canvas) return;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-	};
-
-	const mouseDownHandler = (e: IMouseEvent) => {
-		const nextCoord = getNextCoordinate(e);
-		const newCoords = coords.concat(nextCoord);
-		setNextCoord(newCoords);
+	const mouseDownMagnifHandler = (e: IMouseEvent) => {
+		if (mCoords.length === 4 || !isCalibrationActive) return;
+		const {canvas} = getCanvasAndContext(refMeasureCanvas);
+		const nextCoord = getNextCoordinate(e, canvas);
+		const newCoords = mCoords.concat(nextCoord);
+		setNextMCoord(newCoords);
 	};
 
 
-	const mouseMoveHandler = (e: IMouseEvent) => {
-		const nextCoord = getNextCoordinate(e);
-		const {canvas, ctx} = getCanvasAndContext();
+	const mouseMoveMagnifHandler = (e: IMouseEvent) => {
+		if (mCoords.length !== 2 || !isCalibrationActive) return;
+		const {canvas, ctx} = getCanvasAndContext(refMeasureCanvas);
+		const nextCoord = getNextCoordinate(e, canvas);
 		if (!canvas || !ctx) return;
 		clearCanvas(canvas);
-		drawBoundingRect(ctx, nextCoord)
+		drawBoundingRect(ctx, nextCoord);
 	}
 
 	return (
 		<div className={styles.wrapper}>
 			<SubHeader bottomBorder>
-				{ activeStep === 0 && <Settings /> }
+				{ activeStep === 0 && <SettingsContainer /> }
 				{ activeStep === 1 && <div>measurement</div> }
 			</SubHeader>
 			<div className={styles.outputWrapper}>
+				<video
+					ref={refStream}
+					className={styles.video}
+					style={{display: pictureLabel ? 'none' : 'flex', zIndex: 10}}
+					onLoadedDataCapture={handleSetTakePicture}
+					autoPlay
+				/>
 				{ 
 					dimensions && (
 						<canvas
@@ -118,20 +136,20 @@ const Measurements = ({
 							style={{zIndex: 100}}
 							width={dimensions.width}
 							height={dimensions.height}
-							onMouseDown={mouseDownHandler}
-							onMouseMove={mouseMoveHandler}
+							onMouseDown={mouseDownMagnifHandler}
+							onMouseMove={mouseMoveMagnifHandler}
 						/>
 					)
 				}
-				{picture && <img className={styles.video} src={picture} alt='' />}
-				<canvas style={{display: 'none'}} ref={refServiceCanvas} />
-				<video
+				<img
+					ref={refPicture}
 					className={styles.video}
-					style={{display: 'none'}}
-					ref={refStream}
-					onLoadedDataCapture={handleSetTakePicture}
-					autoPlay
+					src={picture}
+					crossOrigin='anonymous'
+					alt=''
 				/>
+				<canvas ref={refPicureCanvas} style={{display: 'none'}} />
+				<canvas ref={refServiceCanvas} style={{display: 'none'}} />
 			</div>
 		</div>
 	);
