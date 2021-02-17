@@ -6,4 +6,5 @@ export const fetch = axios.create({
 
 export const ocrFetch = axios.create({
 	baseURL: 'http://0.0.0.0:5000/api/v1',
+	headers: {'Access-Control-Allow-Origin': '*'}
 });

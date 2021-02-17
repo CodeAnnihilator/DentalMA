@@ -4,6 +4,7 @@ import testSaga from 'library/common/sagas/testSaga';
 import authSaga from 'library/common/sagas/authSaga';
 import projectsSaga from 'library/common/sagas/projectsSaga';
 import measurementsSaga from 'library/common/sagas/measurementSaga';
+import settingsSaga from 'library/common/sagas/settingsSaga';
 
 export default function* coreSaga() {
 	yield all([
@@ -11,5 +12,6 @@ export default function* coreSaga() {
 		fork(authSaga),
 		fork(projectsSaga),
 		fork(measurementsSaga),
+		fork(settingsSaga),
 	]);
 }

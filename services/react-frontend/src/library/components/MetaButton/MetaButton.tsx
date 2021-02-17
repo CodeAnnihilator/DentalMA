@@ -7,16 +7,29 @@ import styles from './metaButton.module.scss';
 interface IMetaButton {
 	value?: string;
 	label: string;
+	isActive?: boolean;
+	onClick?: any;
+	onRemove?: () => void;
 }
 
 const MetaButton = ({
 	value,
 	label,
+	isActive,
+	onClick,
+	onRemove,
 }: IMetaButton) => {
 	return (
-		<div className={cn(styles.active, {[styles.button]: !value})}>
+		<div
+			onClick={!value ? onClick : null}
+			className={cn(
+				styles.active,
+				{[styles.button]: !value},
+				{[styles.current]: isActive},
+			)}
+		>
 			<span className={styles.value}>{value ? value : label}</span>
-			{ value && <img className={styles.delete} alt='' src={deleteSVG} /> }
+			{ value && <img onClick={onRemove} className={styles.delete} alt='' src={deleteSVG} /> }
 		</div>
 	)
 }
