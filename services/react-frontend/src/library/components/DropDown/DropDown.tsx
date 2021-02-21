@@ -1,4 +1,5 @@
 import {useEffect, useRef} from 'react';
+import cn from 'classnames';
 
 import DropDownList from './Frames/DropDownList';
 
@@ -12,16 +13,16 @@ import styles from './dropDown.module.scss';
 
 interface IDropDown {
 	options: any[];
-	onSelect?: (cameraId: string) => void;
+	onSelect?: (v: any) => void;
 	lockedIndex?: number;
-	isComplete?: boolean;
+	isCompleted?: boolean;
 	placeholder?: string;
 }
 
 const DropDown = ({
 	options,
 	lockedIndex,
-	isComplete,
+	isCompleted,
 	onSelect,
 	placeholder,
 }: IDropDown) => {
@@ -40,12 +41,13 @@ const DropDown = ({
 		setState({activeOption: option.label, isOptionsShown: false});
 		if (onSelect) onSelect(option.value)
 	};
+
 	const toggleShowOptions = () => setState({isOptionsShown: !state.isOptionsShown});
 
 	return (
 		<div ref={wrapperRef} className={styles.wrapper}>
-			<div onClick={toggleShowOptions} className={styles.active}>
-				{ isComplete !== undefined && <img className={styles.status} alt='' src={confirmSVG} /> }
+			<div onClick={toggleShowOptions} className={cn(styles.active, {[styles.completed]: isCompleted})}>
+				{ isCompleted !== undefined && <img className={styles.status} alt='' src={confirmSVG} /> }
 				<span className={styles.selected}>{state.activeOption}</span>
 				<img className={styles.arrowDown} alt='' src={downArrowSVG} />
 			</div>
@@ -53,7 +55,7 @@ const DropDown = ({
 				state.isOptionsShown && (
 					<DropDownList
 						options={options}
-						lockedIndex={lockedIndex}
+						lockedIndex={isCompleted ? undefined : lockedIndex}
 						onSelect={onHandleSelectOption}
 					/>
 				)

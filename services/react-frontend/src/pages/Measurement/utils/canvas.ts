@@ -1,5 +1,4 @@
 import {BaseSyntheticEvent} from 'react';
-import {ocrFetch} from 'library/utilities/fetch';
 
 interface IMouseEvent extends BaseSyntheticEvent {
 	clientX: number;
@@ -50,10 +49,6 @@ export const getOCRCropImage = async (imgRef: any, canvasImgRef: any, canvasCrop
 			let imgData = context.getImageData(coords[0], coords[1], coords[2] - coords[0], coords[3] - coords[1]);
 			if (contextCrop) contextCrop.putImageData(imgData, 0, 0);
 			return canvasCrop.toDataURL('image/png');
-			// var formData = new FormData();
-			// formData.set('file', file);
-			// const res = await ocrFetch.post('/detect-magnification', formData).catch(e => console.log(e));
-			// console.log(res)
 		}
 	}
 };

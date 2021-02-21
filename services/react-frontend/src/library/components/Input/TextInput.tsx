@@ -1,11 +1,17 @@
-import React from 'react';
+import cn from 'classnames';
 
 import styles from './textInput.module.scss';
 
-const TextInput = (props: any) => (
+const TextInput = ({
+	isCompleted,
+	...props
+}: any) => (
 	<input
 		{...props}
-		className={styles.textInput}
+		className={cn(
+			styles.textInput,
+			{[styles.completed]: isCompleted}
+		)}
 	/>
 );
 

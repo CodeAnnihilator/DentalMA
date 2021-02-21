@@ -3,13 +3,13 @@ import {connect} from 'react-redux';
 import {RootState} from 'core/store/configureStore';
 
 import {
-	getActiveStep,
+	getActiveCameraId,
 } from 'library/common/selectors/settingsSelectors';
 
-import Measurement from './Measurement';
+import Analysis from './Analysis';
 
 const mapStateToProps = (store: RootState) => ({
-	activeStep: getActiveStep(store),
+	activeCameraId: getActiveCameraId(store) as any,
 });
 
-export default connect(mapStateToProps)(Measurement);
+export default connect(mapStateToProps)(Analysis);

@@ -60,9 +60,11 @@ function* deleteMeasurementSaga(action: ReturnType<typeof deleteMeasurement>) {
 
 function* requestMeasurementByIdSaga(action: ReturnType<typeof requestMeasurementById>) {
 	try {
-		const {data: measurement} = yield call(() => getMeasurementByIdRequest(action.payload));
+		const {data: measurement} = yield call(getMeasurementByIdRequest, action.payload);
 		yield put(requestMeasurementByIdSuccess(measurement));
+		// console.log('asdasdasdd')
 	} catch (error) {
+		console.log('WOW')
 		console.log(error);
 	}
 }

@@ -3,13 +3,7 @@ import {ActionType, getType} from 'typesafe-actions';
 
 import * as actions from '../actions/settingsActions';
 
-interface IMeta {
-	groupId: number;
-	toothId: number;
-	time: number;
-	substrate: number;
-	location: number;
-}
+import { IMeta } from '../interfaces/settings';
 
 export type SettingsState = Readonly<{
 	cameras: object[];
@@ -99,7 +93,21 @@ export default (state = initialState, action: SettingsActions): SettingsState =>
 				...state,
 				magnification: action.payload,
 			};
-		
+
+		case getType(actions.setMetaData):
+
+			return {
+				...state,
+				meta: action.payload,
+			};
+
+		case getType(actions.setActiveStep):
+
+			return {
+				...state,
+				activeStep: action.payload,
+			};
+
 		default:
 			return state;
 	}

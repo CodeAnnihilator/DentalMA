@@ -1,6 +1,7 @@
 import {createStandardAction} from 'typesafe-actions';
 
 import {SettingsTypes} from '../types/settingsTypes';
+import { IMeta } from './../interfaces/settings';
 
 export const saveCameras =
 	createStandardAction(SettingsTypes.SAVE_CAMERAS)
@@ -33,6 +34,14 @@ export const setPictureLabelSuccess =
 export const setMagnification =
 	createStandardAction(SettingsTypes.SET_MAGNIFICATION)
 		<string>();
+
+export const setMetaData =
+	createStandardAction(SettingsTypes.SET_META_DATA)
+		<IMeta>();
+
+export const setActiveStep =
+	createStandardAction(SettingsTypes.SET_ACTIVE_STEP)
+		<number>();
 
 export const setPictureLabel = createStandardAction(SettingsTypes.SET_PICTURE_LABEL)();
 export const removeCalibration = createStandardAction(SettingsTypes.REMOVE_CALIBRATION)();

@@ -1,6 +1,13 @@
 import DropDown from 'library/components/DropDown';
 import TextInput from 'library/components/Input';
-import MetaButton from 'library/components/MetaButton';
+import MetaButton from 'library/components/Buttons/MetaButton';
+import Modal from 'library/components/Modal';
+import useObjectState from 'library/common/hooks/useObjectState';
+import { IMeta } from 'library/common/interfaces/settings';
+
+import checkIfAnyEmptyField from 'pages/Measurement/utils/checkIfAnyEmptyField';
+
+import MetaModalContent from './Frames/MetaModalContent';
 
 import styles from './settings.module.scss';
 
@@ -12,11 +19,16 @@ interface ISettings {
 	setIsCalibrationActive?: ((isActive: boolean) => void) | any;
 	magnification: number;
 	pictureLabel: string;
-	setActiveCameraId: (cameraId: string) => void;
+	activeCameraId: string;
+	activeCameraLabel: string;
+	setMagnification?: ((v: string) => void) | any;
+	meta: IMeta;
+	setMetaData: (o: IMeta) => void;
+	setActiveCameraId: (v: string) => void;
 	removeCalibration?: () => void | any;
 	removePictureLabel?: () => void | any;
-	setMagnification?: ((v: string) => void) | any;
 	setPictureLabel?: (v: number) => void | any;
+	setActiveStep: (v: number) => void;
 }
 
 const Settings = ({
@@ -27,16 +39,36 @@ const Settings = ({
 	setIsCalibrationActive,
 	magnification,
 	pictureLabel,
+	setMagnification,
+	activeCameraId,
+	activeCameraLabel,
+	meta,
 	setActiveCameraId,
 	removeCalibration,
 	removePictureLabel,
-	setMagnification,
 	setPictureLabel,
+	setActiveStep,
+	setMetaData,
 }: ISettings) => {
+
+	const [state, setState] = useObjectState({
+		isModalOpen: false,
+		meta,
+	})
 
 	const onHandleMagnChange = (e: any) => {
 		if (e.target.validity.valid) {
 			setMagnification(e.target.value)
+		}
+	}
+
+	const onHandleMetaDataModalClose = () => setState({isModalOpen: false});
+	const onHandleMetaDataChange = (metaState: object) => setState({...state, meta: metaState});
+
+	const onHandleMetaDataConfirm = () => {
+		if (!checkIfAnyEmptyField(state.meta)) {
+			onHandleMetaDataModalClose();
+			setMetaData(state.meta);
 		}
 	}
 
@@ -45,14 +77,35 @@ const Settings = ({
 
 	return (
 		<div className={styles.wrapper}>
+			{
+				state.isModalOpen && (
+					<Modal
+						onClose={onHandleMetaDataModalClose}
+						onConfirm={onHandleMetaDataConfirm}
+						bodyComponent={() => (
+							<MetaModalContent
+								onChange={onHandleMetaDataChange}
+								meta={meta}
+							/>
+						)}
+					/>
+				)
+			}
 			<DropDown
 				options={[...stepOptions]}
 				placeholder={settingsLabel}
-				isComplete={false}
+				isCompleted={readySteps[0] === readySteps[1]}
+				onSelect={setActiveStep}
 				lockedIndex={1}
 			/>
-			<MetaButton label='meta' value='meta' />
+			<MetaButton
+				label='meta'
+				hasNoValue
+				isCompleted={!checkIfAnyEmptyField(meta)}
+				onClick={() => setState({isModalOpen: true})}
+			/>
 			<TextInput
+				isCompleted={!!magnification}
 				value={magnification}
 				pattern='[0-9]*'
 				placeholder='magnification...'
@@ -70,8 +123,9 @@ const Settings = ({
 				)
 			}
 			<DropDown
+				isCompleted={!!activeCameraId}
 				options={cameras}
-				placeholder='select camera...'
+				placeholder={activeCameraLabel}
 				onSelect={setActiveCameraId}
 			/>
 			<MetaButton

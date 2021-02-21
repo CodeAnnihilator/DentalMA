@@ -1,26 +1,27 @@
+import ModalControls from '../ModalControls';
+
 import styles from './modalContent.module.scss';
 
 interface IModalContent {
 	onClose: () => void;
 	onConfirm: () => void;
-	headerMessage: string;
-	bodyMessage: string;
+	headerMessage?: string;
+	bodyMessage?: string;
+	bodyComponent?: any;
 }
 
 const ModalContent = ({
-	onClose,
-	onConfirm,
 	headerMessage,
 	bodyMessage,
+	bodyComponent,
+	...props
 }: IModalContent) => (
-	<div onClick={onClose} className={styles.wrapper}>
+	<div className={styles.wrapper}>
 		<div className={styles.innerWrapper}>
-			<div className={styles.header}>{headerMessage}</div>
-			<div className={styles.message}>{bodyMessage}</div>
-			<div className={styles.controls}>
-				<div onClick={onClose}>cancel</div>
-				<div onClick={onConfirm}>confirm</div>
-			</div>
+			{ headerMessage && <div className={styles.header}>{headerMessage}</div> }
+			{ bodyMessage && <div className={styles.message}>{bodyMessage}</div> }
+			{ bodyComponent && bodyComponent() }
+			<ModalControls {...props} />
 		</div>
 	</div>
 )

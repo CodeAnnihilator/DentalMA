@@ -1,0 +1,18 @@
+.wrapper {
+	display: flex;
+    flex: 2;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.input {
+	padding: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+}
+
+.completed {
+    border: 1px solid #4caf50;
+}

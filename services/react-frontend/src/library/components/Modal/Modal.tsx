@@ -9,8 +9,9 @@ const modalRoot = document.getElementById('modal');
 interface IModal {
 	onClose: () => void;
 	onConfirm: () => void;
-	headerMessage: string;
-	bodyMessage: string;
+	headerMessage?: string;
+	bodyMessage?: string;
+	bodyComponent?: any;
 }
 
 const Modal = (props: IModal) => {

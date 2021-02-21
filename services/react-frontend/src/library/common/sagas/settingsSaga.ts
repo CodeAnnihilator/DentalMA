@@ -42,8 +42,8 @@ function* setIsCalibrationActiveSaga(action: ReturnType<typeof setIsCalibrationA
 
 function* setActiveCameraIdSaga(action: ReturnType<typeof setActiveCameraId>) {
 	try {
-		const localizedFormat = require('dayjs/plugin/localizedFormat')
-		dayjs.extend(localizedFormat)
+		const localizedFormat = require('dayjs/plugin/localizedFormat');
+		dayjs.extend(localizedFormat);
 		const timeLabel = dayjs(new Date()).format('LLL');
 		yield put(setPictureLabelSuccess(`CREATED AT: ${timeLabel}`));
 	} catch (error) {

@@ -10,7 +10,7 @@ import SubHeader from 'library/components/SubHeader';
 import ProjectsContainer from 'pages/Projects/ProjectsContainer';
 import ProjectContainer from 'pages/Project/ProjectContainer';
 import MeasurementContainer from 'pages/Measurement/MeasurementContainer';
-import Button from 'library/components/Button';
+import Button from 'library/components/Buttons/Button';
 
 import MeasurementSVG from 'resources/icons/measurement.svg';
 

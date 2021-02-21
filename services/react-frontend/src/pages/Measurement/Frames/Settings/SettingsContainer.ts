@@ -9,6 +9,9 @@ import {
 	getMagnification,
 	getIsCalibrationActive,
 	getPictureLabel,
+	getActiveCameraId,
+	getActiveCameraLabel,
+	getMeta,
 } from 'library/common/selectors/settingsSelectors';
 
 import {
@@ -18,6 +21,8 @@ import {
 	removePictureLabel,
 	setMagnification,
 	setPictureLabel,
+	setActiveStep,
+	setMetaData,
 } from 'library/common/actions/settingsActions';
 
 import Settings from './Settings';
@@ -29,6 +34,9 @@ const mapStateToProps = (store: RootState) => ({
 	magnification: getMagnification(store) as any,
 	isCalibrationActive: getIsCalibrationActive(store) as any,
 	pictureLabel: getPictureLabel(store) as any,
+	activeCameraId: getActiveCameraId(store) as any,
+	activeCameraLabel: getActiveCameraLabel(store) as any,
+	meta: getMeta(store) as any,
 });
 
 export default connect(mapStateToProps, {
@@ -38,4 +46,6 @@ export default connect(mapStateToProps, {
 	removeCalibration,
 	setMagnification,
 	removePictureLabel,
+	setActiveStep,
+	setMetaData,
 })(Settings);

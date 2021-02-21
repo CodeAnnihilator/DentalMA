@@ -10,10 +10,20 @@ export const getActiveCameraId = (state: RootState) => state.settings.camera;
 export const getIsCalibrationActive = (state: RootState) => state.settings.isCalibrationActive;
 export const getActiveStep = (state: RootState) => state.settings.activeStep;
 export const getPictureLabel = (state: RootState) => state.settings.pictureLabel;
+export const getMeta = (state: RootState) => state.settings.meta;
 
 export const getCameras = createSelector(
 	[getAllCameras],
 	(cameras: any) => cameras.map((c: any) => ({value: c.deviceId, label: c.label}))
+)
+
+export const getActiveCameraLabel = createSelector(
+	[getCameras, getActiveCameraId],
+	(cameras, activeCameraId) => {
+		if (!activeCameraId) return 'select camera...';
+		const camera = cameras.find((c: any) => c.value === activeCameraId);
+		return camera.label;
+	}
 )
 
 export const getMagnification = (state: RootState) => state.settings.magnification;

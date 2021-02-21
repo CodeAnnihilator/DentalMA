@@ -1,0 +1,42 @@
+.active {
+    display: flex;
+    font-size: 0.8em;
+    align-items: center;
+    border: 1px solid silver;
+    border-radius: 4px;
+	overflow: hidden;
+	cursor: not-allowed;
+    margin: 0 5px;
+}
+
+.current {
+    border: 1px solid rgb(0, 153, 255);
+}
+
+.status {
+    width: 16px;
+    padding: 5px;
+}
+
+.delete {
+    width: 16px;
+    border-left: 1px solid silver;
+    padding: 5px;
+    background-color: #DAFEEE;
+	cursor: pointer;
+}
+
+.button {
+	cursor: pointer;
+	text-transform: uppercase;
+    padding: 0 10px;
+}
+
+.value {
+    padding: 0 5px;
+	font-size: 0.9em;
+}
+
+.completed {
+    border: 1px solid #4caf50;
+}
