@@ -22,6 +22,7 @@ interface IStreamingOutput {
 	saveCameras: (cameras: object[]) => void;
 	requestOCRMeasurement: (measurement: any) => void;
 	setIsCalibrationActive: (isActive: boolean) => void;
+	saveBase64Img: (img: string) => void;
 }
 
 const StreamingOutput = ({
@@ -32,6 +33,7 @@ const StreamingOutput = ({
 	saveCameras,
 	requestOCRMeasurement,
 	setIsCalibrationActive,
+	saveBase64Img,
 }: IStreamingOutput) => {
 
 	const refStream = useRef<HTMLVideoElement>(null);
@@ -73,9 +75,15 @@ const StreamingOutput = ({
 	}, [calibration])
 
 	useEffect(() => {
-		handleSetNextStream()
-		handleSetTakePicture()
+		handleSetNextStream();
+		handleSetTakePicture();
 	}, [activeCameraId]);
+
+	useEffect(() => {
+		if (picture !== null) {
+			saveBase64Img(picture);
+		}
+	}, [picture]);
 
 	const handleSetNextStream = () => handleNextStream(activeCameraId, refStream, stream, setNextStream);
 	const handleSetTakePicture = () => handleTakePicture(refStream, refServiceCanvas, stream, setPicture);

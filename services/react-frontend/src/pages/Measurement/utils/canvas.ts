@@ -1,4 +1,5 @@
 import {BaseSyntheticEvent} from 'react';
+import {ICoord} from 'pages/Measurement/Frames/Analysis/Analysis';
 
 interface IMouseEvent extends BaseSyntheticEvent {
 	clientX: number;
@@ -52,3 +53,21 @@ export const getOCRCropImage = async (imgRef: any, canvasImgRef: any, canvasCrop
 		}
 	}
 };
+
+const lenpoint = (coordA: number[], coordB: number[]) => {
+	const a = coordA[0] - coordB[0];
+	const b = coordA[1] - coordB[1];
+
+	return Math.hypot(a, b);
+};
+
+export const getClickedNode = (coords: ICoord[], nextCoord: ICoord) => {
+	if (!coords.length) return;
+	const nodesWithDistances = coords.map((c, i) => {
+		const distance = lenpoint(c.coord, nextCoord.coord);
+		return {...c, distance, i};
+	})
+	const closestNode = nodesWithDistances.reduce((c, n) => c.distance < n.distance ? c : n);
+	if (closestNode.distance <= 5) return closestNode;
+	return null;
+}

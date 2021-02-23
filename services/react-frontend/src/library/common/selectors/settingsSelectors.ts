@@ -11,6 +11,7 @@ export const getIsCalibrationActive = (state: RootState) => state.settings.isCal
 export const getActiveStep = (state: RootState) => state.settings.activeStep;
 export const getPictureLabel = (state: RootState) => state.settings.pictureLabel;
 export const getMeta = (state: RootState) => state.settings.meta;
+export const getBase64Img = (state: RootState) => state.settings.base64Img;
 
 export const getCameras = createSelector(
 	[getAllCameras],
@@ -40,7 +41,7 @@ export const getReadySteps = createSelector(
 	[getAllSettingsData],
 	(s: any) => {
 		let completedSteps = 0;
-		const skipFiels = ['activeStep', 'cameras', 'calibrationRect', 'isCalibrationActive'];
+		const skipFiels = ['activeStep', 'cameras', 'calibrationRect', 'isCalibrationActive', 'base64Img'];
 		const totalSteps = Object.keys(s).filter(v => !skipFiels.some(f => f === v));
 		totalSteps.forEach(v => !!s[v] && ++completedSteps)
 		return [completedSteps, totalSteps.length]

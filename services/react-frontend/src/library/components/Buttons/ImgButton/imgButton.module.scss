@@ -5,4 +5,10 @@
     border-radius: 4px;
 	margin-right: 5px;
     border: 1px solid silver;
+    cursor: pointer;
+}
+
+.active {
+    border: 2px solid #77b4ff;
+    cursor: not-allowed;
 }

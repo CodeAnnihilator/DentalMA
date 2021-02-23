@@ -14,6 +14,7 @@ import {
 	requestOCRMeasurement,
 	removeCalibration,
 	setIsCalibrationActive,
+	saveBase64Img,
 } from 'library/common/actions/settingsActions';
 
 import StreamingOutput from './StreamingOutput';
@@ -30,4 +31,5 @@ export default connect(mapStateToProps, {
 	requestOCRMeasurement,
 	removeCalibration,
 	setIsCalibrationActive,
+	saveBase64Img,
 })(StreamingOutput);

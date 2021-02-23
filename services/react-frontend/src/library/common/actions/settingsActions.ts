@@ -43,6 +43,10 @@ export const setActiveStep =
 	createStandardAction(SettingsTypes.SET_ACTIVE_STEP)
 		<number>();
 
+export const saveBase64Img =
+	createStandardAction(SettingsTypes.SAVE_BASE64_IMG)
+		<string>();
+
 export const setPictureLabel = createStandardAction(SettingsTypes.SET_PICTURE_LABEL)();
 export const removeCalibration = createStandardAction(SettingsTypes.REMOVE_CALIBRATION)();
 export const removePictureLabel = createStandardAction(SettingsTypes.REMOVE_PICTURE_LABEL)();

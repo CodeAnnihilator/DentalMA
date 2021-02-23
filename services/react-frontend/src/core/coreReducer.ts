@@ -7,6 +7,7 @@ import projectsReducer from 'library/common/reducers/projectsReducer';
 import measurementsReducer from 'library/common/reducers/measurementsReducer';
 import measurementReducer from 'library/common/reducers/measurementReducer';
 import settingsReducer from 'library/common/reducers/settingsReducer';
+import analysisReducer from 'library/common/reducers/analysisReducer';
 
 const createCoreReducer = (history: any) => combineReducers({
 	router: connectRouter(history),
@@ -16,6 +17,7 @@ const createCoreReducer = (history: any) => combineReducers({
 	project: measurementsReducer,
 	measurement: measurementReducer,
 	settings: settingsReducer,
+	analysis: analysisReducer,
 });
 
 export default createCoreReducer;

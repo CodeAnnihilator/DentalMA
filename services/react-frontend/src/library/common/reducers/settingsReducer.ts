@@ -1,3 +1,4 @@
+import { saveBase64Img } from './../actions/settingsActions';
 /* eslint-disable import/no-anonymous-default-export */
 import {ActionType, getType} from 'typesafe-actions';
 
@@ -15,6 +16,7 @@ export type SettingsState = Readonly<{
 	meta: IMeta | null;
 	activeStep: number;
 	isCalibrationActive: boolean;
+	base64Img: string | null;
 }>;
 
 const initialState: SettingsState = {
@@ -27,11 +29,31 @@ const initialState: SettingsState = {
 	meta: null,
 	activeStep: 0,
 	isCalibrationActive: false,
+	base64Img: null,
 };
+
+const dummyState: SettingsState = {
+	cameras: [],
+	camera: '',
+	magnification: '200',
+	calibration: 300,
+	calibrationRect: [876.7961479698133, 945.3694672510649, 1206.7669799527755, 961.0148774615717],
+	pictureLabel: null,
+	meta: {
+		groupId: '123',
+		toothId: '123',
+		time: '123',
+		substrate: '123',
+		location: '123',
+	},
+	activeStep: 0,
+	isCalibrationActive: false,
+	base64Img: null,
+}
 
 export type SettingsActions = ActionType<typeof actions>;
 
-export default (state = initialState, action: SettingsActions): SettingsState => {
+export default (state = dummyState, action: SettingsActions): SettingsState => {
 	switch (action.type) {
 
 		case getType(actions.saveCameras):
@@ -51,7 +73,7 @@ export default (state = initialState, action: SettingsActions): SettingsState =>
 		case getType(actions.setActiveCameraId):
 
 			return {
-				...initialState,
+				...dummyState,
 				cameras: state.cameras,
 				magnification: state.magnification,
 				camera: action.payload,
@@ -106,6 +128,13 @@ export default (state = initialState, action: SettingsActions): SettingsState =>
 			return {
 				...state,
 				activeStep: action.payload,
+			};
+
+		case getType(actions.saveBase64Img):
+
+			return {
+				...state,
+				base64Img: action.payload,
 			};
 
 		default:

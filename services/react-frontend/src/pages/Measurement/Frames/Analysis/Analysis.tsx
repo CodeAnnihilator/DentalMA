@@ -1,21 +1,15 @@
-import React, {useState, useRef, BaseSyntheticEvent} from 'react';
+import {useState, useRef, BaseSyntheticEvent} from 'react';
+
+import useOutsideMove from 'library/common/hooks/useOutsideMove';
+import { IMQSettings } from 'library/common/reducers/analysisReducer';
+
+import {getCanvasAndContext, clearCanvas, getNextCoordinate, getClickedNode} from '../../utils/canvas';
 
 import styles from './analysis.module.scss';
 
-const pickerData = [
-	{id: '0', color: '#A4FF91', text: 'MQ1'},
-	{id: '1', color: '#91FFF8', text: 'MQ2'},
-	{id: '2', color: '#91AFFF', text: 'MQ3'},
-	{id: '3', color: '#FBFF91', text: 'MQ4'},
-	{id: '4', color: '#FFC391', text: 'MQ5'},
-	{id: '5', color: '#FF9791', text: 'MQ6'},
-	{id: '6', color: '#D691FF', text: 'MQ7'},
-];
-
-const getPickerColorById = (colorId: string) => {
-	const colorObj = pickerData.find(({id}) => id === colorId);
-
-	return colorObj?.color || pickerData[0].color;
+const getPickerColorById = (colorId: number, mqSettings: IMQSettings[]) => {
+	const colorObj = mqSettings.find(({id}) => id === colorId);
+	return colorObj?.color || mqSettings[0].color;
 };
 
 interface IMouseEvent extends BaseSyntheticEvent {
@@ -23,44 +17,48 @@ interface IMouseEvent extends BaseSyntheticEvent {
 	clientY: number;
 }
 
-interface ICoord {
+export interface ICoord {
 	coord: number[];
 	colorId: string;
 }
 
-const Analysis = () => {
+interface IAnalysis {
+	base64Img: string;
+	activeControl: number;
+	activeMQ: number;
+	mqSettings: IMQSettings[];
+	coords: ICoord[];
+	updateCoordinates: (coords: ICoord[]) => void;
+}
 
-	const [activeId, onPickerColorSwitch] = useState('0');
-	const [coords, setNextCoord] = useState([] as ICoord[]);
+const Analysis = ({
+	base64Img,
+	mqSettings,
+	activeMQ,
+	activeControl,
+	coords,
+	updateCoordinates,
+}: IAnalysis) => {
 
+	const refPicture = useRef<HTMLImageElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
-	const onHandlePickerClick = (id: string) => onPickerColorSwitch(id);
+	useOutsideMove(canvasRef, coords, activeMQ === 1, () => {
+		if (activeControl) {
+			const {canvas, ctx} = getCanvasAndContext(canvasRef);
+			if (!canvas || !ctx) return;
+			clearCanvas(canvas);
+			if (ctx) drawShapes(ctx, coords);
+		}
+	});
 
-	const getCanvasAndContext = () => {
-		const canvas = canvasRef.current;
-		const ctx = canvas?.getContext('2d');
-		if (!ctx || !canvas) return {canvas: null, ctx: null};
+	const [dimensions, setDimensions] = useState({width: 0, height: 0});
 
-		return {canvas, ctx};
-	};
-
-	const getNextCoordinate = (e: IMouseEvent) => {
-		const {canvas} = getCanvasAndContext();
-		if (!canvas) return [];
-		const rect = canvas.getBoundingClientRect();
-		const scaleX = canvas.width / rect.width;
-		const scaleY = canvas.height / rect.height;
-		const x = (e.clientX - rect.left) * scaleX;
-		const y = (e.clientY - rect.top) * scaleY;
-
-		return [x, y] as number[];
-	};
-
-	const clearCanvas = (canvas: HTMLCanvasElement) => {
-		const ctx = canvas?.getContext('2d');
-		if (!ctx || !canvas) return;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	const handleImgLoad = () => {
+		if (refPicture.current) {
+			const {naturalWidth, naturalHeight} = refPicture.current;
+			setDimensions({width: naturalWidth, height: naturalHeight});
+		}
 	};
 
 	const drawShapes = (ctx: CanvasRenderingContext2D, drawCoords: ICoord[]) => {
@@ -69,16 +67,16 @@ const Analysis = () => {
 			ctx.beginPath();
 			if (i !== 0) ctx.moveTo(drawCoords[i - 1].coord[0], drawCoords[i - 1].coord[1]);
 			ctx.lineTo(coord[0], coord[1]);
-			ctx.strokeStyle = getPickerColorById(colorId);
-			ctx.lineWidth = 5;
+			ctx.strokeStyle = getPickerColorById(parseInt(colorId, 10), mqSettings);
+			ctx.lineWidth = 2;
 			ctx.stroke();
 		});
 		// draw circles
 		drawCoords.forEach(({coord, colorId}) => {
 			ctx.beginPath();
 			ctx.moveTo(coord[0], coord[1]);
-			ctx.arc(coord[0], coord[1], 10, 0, 2 * Math.PI);
-			ctx.fillStyle = getPickerColorById(colorId);
+			ctx.arc(coord[0], coord[1], 5, 0, 2 * Math.PI);
+			ctx.fillStyle = getPickerColorById(parseInt(colorId, 10), mqSettings);
 			ctx.fill();
 		});
 	};
@@ -91,48 +89,62 @@ const Analysis = () => {
 		ctx.beginPath();
 		ctx.moveTo(lastCoord[0], lastCoord[1]);
 		ctx.lineTo(nextCoord[0], nextCoord[1]);
-		ctx.strokeStyle = getPickerColorById(activeId);
+		ctx.strokeStyle = getPickerColorById(activeMQ, mqSettings);
 		ctx.stroke();
 	};
 
 	const mouseDownHandler = (e: IMouseEvent) => {
-		const nextCoord = getNextCoordinate(e);
-		const nextCoordObject = {coord: nextCoord, colorId: activeId};
-		const newCoords = coords.concat(nextCoordObject);
-		const {canvas, ctx} = getCanvasAndContext();
+		const {canvas, ctx} = getCanvasAndContext(canvasRef);
 		if (!canvas || !ctx) return;
-		setNextCoord(newCoords);
-		clearCanvas(canvas);
-		if (ctx) drawShapes(ctx, newCoords);
+		const nextCoord = getNextCoordinate(e, canvas);
+		const nextCoordObject = {coord: nextCoord, colorId: activeMQ as any};
+		const newCoords = coords.concat(nextCoordObject);
+		if (activeControl) {
+			updateCoordinates(newCoords);
+			clearCanvas(canvas);
+			if (ctx) drawShapes(ctx, newCoords);
+			return;
+		}
+		const clickedNode = getClickedNode(coords, nextCoordObject);
+		console.log(clickedNode);
 	};
 
 	const onMoveHandler = (e: IMouseEvent) => {
-		const nextCoord = getNextCoordinate(e);
+		const {canvas, ctx} = getCanvasAndContext(canvasRef);
 		const lastCoordObj = coords[coords.length - 1];
-		const {canvas, ctx} = getCanvasAndContext();
 		if (!canvas || !ctx || !lastCoordObj) return;
-		const lastCoord = lastCoordObj.coord;
-		clearCanvas(canvas);
-		drawCursorLine(ctx, lastCoord, nextCoord);
-		drawShapes(ctx, coords);
+		if (activeControl) {
+			const nextCoord = getNextCoordinate(e, canvas);
+			const lastCoord = lastCoordObj.coord;
+			clearCanvas(canvas);
+			drawCursorLine(ctx, lastCoord, nextCoord);
+			drawShapes(ctx, coords);
+			return;
+		}
 	};
+
+	if (!base64Img) return <div>loading...</div>
 
 	return (
 		<>
-			<canvas
-				className={styles.canvas}
-				width={3348}
-				height={1705}
-				ref={canvasRef}
-				onMouseDown={mouseDownHandler}
-				onMouseMove={onMoveHandler}
-			/>
+			{
+				!!dimensions.height && (
+					<canvas
+						className={styles.canvas}
+						width={dimensions.width}
+						height={dimensions.height}
+						ref={canvasRef}
+						onMouseDown={mouseDownHandler}
+						onMouseMove={onMoveHandler}
+					/>
+				)
+			}
 			<img
 				className={styles.img}
+				src={base64Img}
+				ref={refPicture}
+				onLoad={handleImgLoad}
 				alt=''
-				width={3348}
-				height={1705}
-				src='https://www.mdpi.com/materials/materials-13-03802/article_deploy/html/images/materials-13-03802-g007.png'
 			/>
 		</>
 	);
