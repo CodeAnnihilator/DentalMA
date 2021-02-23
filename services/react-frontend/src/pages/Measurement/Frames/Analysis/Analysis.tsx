@@ -1,6 +1,10 @@
-import {useState, useRef, BaseSyntheticEvent} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {useRef, BaseSyntheticEvent, useEffect} from 'react';
 
+import ContextMenu from 'library/components/ContextMenu';
+import useWindowSize from 'library/common/hooks/useWindowSize';
 import useOutsideMove from 'library/common/hooks/useOutsideMove';
+import useObjectState from 'library/common/hooks/useObjectState';
 import { IMQSettings } from 'library/common/reducers/analysisReducer';
 
 import {getCanvasAndContext, clearCanvas, getNextCoordinate, getClickedNode} from '../../utils/canvas';
@@ -43,6 +47,8 @@ const Analysis = ({
 	const refPicture = useRef<HTMLImageElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
+	const [windowWidth, windowHeight] = useWindowSize();
+
 	useOutsideMove(canvasRef, coords, activeMQ === 1, () => {
 		if (activeControl) {
 			const {canvas, ctx} = getCanvasAndContext(canvasRef);
@@ -52,12 +58,27 @@ const Analysis = ({
 		}
 	});
 
-	const [dimensions, setDimensions] = useState({width: 0, height: 0});
+	const [state, setState] = useObjectState({
+		width: 0,
+		height: 0,
+		vHeight: 0,
+		vWidth: 0,
+		isContextOpen: false,
+		contextObject: null,
+		contextCoords: [],
+	});
+
+	useEffect(() => {
+		// if (!refPicture.current) return;
+		const {clientHeight, clientWidth}: any = refPicture.current;
+		console.log(clientWidth)
+		setState({vHeight: clientHeight, vWidth: clientWidth})
+	}, [windowWidth, windowHeight])
 
 	const handleImgLoad = () => {
 		if (refPicture.current) {
 			const {naturalWidth, naturalHeight} = refPicture.current;
-			setDimensions({width: naturalWidth, height: naturalHeight});
+			setState({width: naturalWidth, height: naturalHeight});
 		}
 	};
 
@@ -106,7 +127,14 @@ const Analysis = ({
 			return;
 		}
 		const clickedNode = getClickedNode(coords, nextCoordObject);
-		console.log(clickedNode);
+		if (clickedNode !== null) {
+			const {offsetX, offsetY}: any = e.nativeEvent;
+			setState({
+				isContextOpen: true,
+				contextObject: clickedNode,
+				contextCoords: [offsetX, offsetY],
+			})
+		}
 	};
 
 	const onMoveHandler = (e: IMouseEvent) => {
@@ -125,20 +153,45 @@ const Analysis = ({
 
 	if (!base64Img) return <div>loading...</div>
 
+	const boxSizes = {
+		height: state.vHeight,
+		width: state.vWidth,
+		maxHeight: state.vHeight,
+		maxWidth: state.vWidth,
+	};
+
 	return (
 		<>
-			{
-				!!dimensions.height && (
-					<canvas
-						className={styles.canvas}
-						width={dimensions.width}
-						height={dimensions.height}
-						ref={canvasRef}
-						onMouseDown={mouseDownHandler}
-						onMouseMove={onMoveHandler}
-					/>
-				)
-			}
+			<div className={styles.canvasWrapper} style={boxSizes}>
+				{
+					state.isContextOpen && (
+						<ContextMenu coord={state.contextCoords} data={[
+							{
+								color: 'red',
+								text: 'remove MQ node',
+								onClick: () => console.log('remove node')
+							},
+							{
+								color: 'blue',
+								text: 'change MQ node color',
+								onClick: () => console.log('change color')
+							}
+						]} />
+					)
+				}
+				{
+					!!state.height && (
+						<canvas
+							className={styles.canvas}
+							width={state.width}
+							height={state.height}
+							ref={canvasRef}
+							onMouseDown={mouseDownHandler}
+							onMouseMove={onMoveHandler}
+						/>
+					)
+				}
+			</div>
 			<img
 				className={styles.img}
 				src={base64Img}
