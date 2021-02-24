@@ -3,7 +3,7 @@ import {RootState} from 'core/store/configureStore';
 
 import { lenpoint } from 'pages/Measurement/utils/canvas';
 
-import { getCalibration, getMagnification, getMeta } from 'library/common/selectors/settingsSelectors';
+import { getCalibration, getMagnification, getMeta, getXDeviation, getYDeviation } from 'library/common/selectors/settingsSelectors';
 
 export const getActiveControl = (state: RootState) => state.analysis.activeControl;
 export const getMqSettings = (state: RootState) => state.analysis.mqSettings;
@@ -17,14 +17,14 @@ export const getActiveMQObj = createSelector(
 
 
 export const getExcelData = createSelector(
-	[getCoords, getCalibration, getMagnification, getMqSettings, getMeta],
-	(data: any[], calibration: any, magnification: any, mqs: any[], meta) => {
+	[getCoords, getCalibration, getMagnification, getMqSettings, getMeta, getXDeviation, getYDeviation],
+	(data: any[], calibration: any, magnification: any, mqs: any[], meta, xDev, yDev) => {
 		const nmByPx = magnification / calibration;
 		if (data.length <= 1) return null;
 		const newData = [] as any;
 		data.forEach((c, i, arr) => {
 			if (!arr[i + 1]) return;
-			const distance = lenpoint(c.coord, arr[i + 1].coord, 1, 1);
+			const distance = lenpoint(c.coord, arr[i + 1].coord, xDev, yDev);
 			const nmDistance = distance * nmByPx;
 			const newC = {colorId: arr[i + 1].colorId, distance: nmDistance};
 			newData.push(newC);

@@ -47,6 +47,14 @@ export const saveBase64Img =
 	createStandardAction(SettingsTypes.SAVE_BASE64_IMG)
 		<string>();
 
+export const setXDeviation =
+	createStandardAction(SettingsTypes.SET_X_DEVIATION)
+		<number>();
+
+export const setYDeviation =
+	createStandardAction(SettingsTypes.SET_Y_DEVIATION)
+		<number>();
+
 export const setPictureLabel = createStandardAction(SettingsTypes.SET_PICTURE_LABEL)();
 export const removeCalibration = createStandardAction(SettingsTypes.REMOVE_CALIBRATION)();
 export const removePictureLabel = createStandardAction(SettingsTypes.REMOVE_PICTURE_LABEL)();

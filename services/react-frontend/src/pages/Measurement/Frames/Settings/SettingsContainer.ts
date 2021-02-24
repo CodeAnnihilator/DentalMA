@@ -12,6 +12,8 @@ import {
 	getActiveCameraId,
 	getActiveCameraLabel,
 	getMeta,
+	getXDeviation,
+	getYDeviation,
 } from 'library/common/selectors/settingsSelectors';
 
 import {
@@ -23,6 +25,8 @@ import {
 	setPictureLabel,
 	setActiveStep,
 	setMetaData,
+	setXDeviation,
+	setYDeviation,
 } from 'library/common/actions/settingsActions';
 
 import Settings from './Settings';
@@ -37,6 +41,8 @@ const mapStateToProps = (store: RootState) => ({
 	activeCameraId: getActiveCameraId(store) as any,
 	activeCameraLabel: getActiveCameraLabel(store) as any,
 	meta: getMeta(store) as any,
+	xDeviation: getXDeviation(store) as any,
+	yDeviation: getYDeviation(store) as any,
 });
 
 export default connect(mapStateToProps, {
@@ -48,4 +54,6 @@ export default connect(mapStateToProps, {
 	removePictureLabel,
 	setActiveStep,
 	setMetaData,
+	setXDeviation,
+	setYDeviation,
 })(Settings);

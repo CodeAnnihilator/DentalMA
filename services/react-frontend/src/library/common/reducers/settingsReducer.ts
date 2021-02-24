@@ -17,6 +17,8 @@ export type SettingsState = Readonly<{
 	activeStep: number;
 	isCalibrationActive: boolean;
 	base64Img: string | null;
+	xDeviation: number;
+	yDeviation: number;
 }>;
 
 const initialState: SettingsState = {
@@ -30,6 +32,8 @@ const initialState: SettingsState = {
 	activeStep: 0,
 	isCalibrationActive: false,
 	base64Img: null,
+	xDeviation: 1,
+	yDeviation: 1,
 };
 
 const dummyState: SettingsState = {
@@ -49,6 +53,8 @@ const dummyState: SettingsState = {
 	activeStep: 0,
 	isCalibrationActive: false,
 	base64Img: null,
+	xDeviation: 1,
+	yDeviation: 1,
 }
 
 export type SettingsActions = ActionType<typeof actions>;
@@ -135,6 +141,20 @@ export default (state = dummyState, action: SettingsActions): SettingsState => {
 			return {
 				...state,
 				base64Img: action.payload,
+			};
+
+		case getType(actions.setXDeviation):
+
+			return {
+				...state,
+				xDeviation: action.payload,
+			};
+
+		case getType(actions.setYDeviation):
+
+			return {
+				...state,
+				yDeviation: action.payload,
 			};
 
 		default:

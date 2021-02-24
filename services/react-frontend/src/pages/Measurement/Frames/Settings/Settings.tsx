@@ -22,7 +22,11 @@ interface ISettings {
 	activeCameraId: string;
 	activeCameraLabel: string;
 	setMagnification?: ((v: string) => void) | any;
+	setXDeviation?: ((v: string) => void) | any;
+	setYDeviation?: ((v: string) => void) | any;
 	meta: IMeta;
+	xDeviation: number;
+	yDeviation: number;
 	setMetaData: (o: IMeta) => void;
 	setActiveCameraId: (v: string) => void;
 	removeCalibration?: () => void | any;
@@ -43,12 +47,16 @@ const Settings = ({
 	activeCameraId,
 	activeCameraLabel,
 	meta,
+	xDeviation,
+	yDeviation,
 	setActiveCameraId,
 	removeCalibration,
 	removePictureLabel,
 	setPictureLabel,
 	setActiveStep,
 	setMetaData,
+	setXDeviation,
+	setYDeviation,
 }: ISettings) => {
 
 	const [state, setState] = useObjectState({
@@ -56,9 +64,9 @@ const Settings = ({
 		meta,
 	})
 
-	const onHandleMagnChange = (e: any) => {
+	const onHandleInputChange = (cb: any) => (e: any) => {
 		if (e.target.validity.valid) {
-			setMagnification(e.target.value)
+			cb(e.target.value);
 		}
 	}
 
@@ -105,11 +113,25 @@ const Settings = ({
 				onClick={() => setState({isModalOpen: true})}
 			/>
 			<TextInput
+				isCompleted={!!xDeviation}
+				value={xDeviation}
+				pattern='[0-9\.]*'
+				placeholder='x deviation...'
+				onChange={onHandleInputChange(setXDeviation)}
+			/>
+			<TextInput
+				isCompleted={!!yDeviation}
+				value={yDeviation}
+				pattern='[0-9\.]*'
+				placeholder='y deviation...'
+				onChange={onHandleInputChange(setYDeviation)}
+			/>
+			<TextInput
 				isCompleted={!!magnification}
 				value={magnification}
 				pattern='[0-9]*'
 				placeholder='magnification...'
-				onChange={onHandleMagnChange}
+				onChange={onHandleInputChange(setMagnification)}
 			/>
 			{
 				!!magnification && (
@@ -128,12 +150,16 @@ const Settings = ({
 				placeholder={activeCameraLabel}
 				onSelect={setActiveCameraId}
 			/>
-			<MetaButton
-				label='take picture'
-				value={pictureLabel}
-				onClick={setPictureLabel}
-				onRemove={removePictureLabel}
-			/>
+			{
+				activeCameraId && (
+					<MetaButton
+						label='take picture'
+						value={pictureLabel}
+						onClick={setPictureLabel}
+						onRemove={removePictureLabel}
+					/>
+				)
+			}
 		</div>
 	);
 };

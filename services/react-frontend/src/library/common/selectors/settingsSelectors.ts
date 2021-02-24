@@ -12,6 +12,8 @@ export const getActiveStep = (state: RootState) => state.settings.activeStep;
 export const getPictureLabel = (state: RootState) => state.settings.pictureLabel;
 export const getMeta = (state: RootState) => state.settings.meta;
 export const getBase64Img = (state: RootState) => state.settings.base64Img;
+export const getXDeviation = (state: RootState) => state.settings.xDeviation;
+export const getYDeviation = (state: RootState) => state.settings.yDeviation;
 
 export const getCameras = createSelector(
 	[getAllCameras],
