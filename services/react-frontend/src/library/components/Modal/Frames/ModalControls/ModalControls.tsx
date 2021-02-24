@@ -1,8 +1,8 @@
 import styles from './modalControls.module.scss';
 
 interface IModalControls {
-	onClose: () => void;
-	onConfirm: () => void;
+	onClose?: () => void;
+	onConfirm?: () => void;
 }
 
 const ModalControls = ({

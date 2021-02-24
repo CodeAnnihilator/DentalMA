@@ -1,6 +1,46 @@
+import {createSelector} from 'reselect';
 import {RootState} from 'core/store/configureStore';
+
+import { lenpoint } from 'pages/Measurement/utils/canvas';
+
+import { getCalibration, getMagnification, getMeta } from 'library/common/selectors/settingsSelectors';
 
 export const getActiveControl = (state: RootState) => state.analysis.activeControl;
 export const getMqSettings = (state: RootState) => state.analysis.mqSettings;
 export const getActiveMQ = (state: RootState) => state.analysis.activeMQ;
 export const getCoords = (state: RootState) => state.analysis.coords;
+
+export const getActiveMQObj = createSelector(
+	[getMqSettings, getActiveMQ],
+	(data, id) => data[id]
+)
+
+
+export const getExcelData = createSelector(
+	[getCoords, getCalibration, getMagnification, getMqSettings, getMeta],
+	(data: any[], calibration: any, magnification: any, mqs: any[], meta) => {
+		const nmByPx = magnification / calibration;
+		if (data.length <= 1) return null;
+		const newData = [] as any;
+		data.forEach((c, i, arr) => {
+			if (!arr[i + 1]) return;
+			const distance = lenpoint(c.coord, arr[i + 1].coord, 1, 1);
+			const nmDistance = distance * nmByPx;
+			const newC = {colorId: arr[i + 1].colorId, distance: nmDistance};
+			newData.push(newC);
+		});
+
+		const totalDistance = newData.reduce((c: number, n: any) => c + n.distance, 0);
+
+		const mqsWithDistances = mqs.map(({key, ...c}) => {
+			const totalMQDistance = newData
+				.filter((o: any) => o.colorId === c.id)
+				.reduce((c: any, n: any) => c + n.distance, 0);
+			const percentage = `${(totalMQDistance / totalDistance * 100).toFixed(2)}%`;
+			const distance = `${totalMQDistance.toFixed(2)}um`;
+			return {...meta, ...c, distance, percentage};
+		})
+
+		return mqsWithDistances;
+	}
+)

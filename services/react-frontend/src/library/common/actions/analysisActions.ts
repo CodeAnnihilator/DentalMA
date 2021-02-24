@@ -15,3 +15,12 @@ export const setActiveMq =
 export const updateCoordinates =
 	createStandardAction(AnalysisTypes.UPDATE_COORDINATES)
 		<ICoord[]>();
+
+
+export const removeMQNode =
+	createStandardAction(AnalysisTypes.REMOVE_MQ_NODE)
+		<number>();
+
+export const replaceMQNode =
+	createStandardAction(AnalysisTypes.REPLACE_MQ_NODE)
+		<any>();

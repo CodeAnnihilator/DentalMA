@@ -7,11 +7,12 @@ import ModalContent from 'library/components/Modal/Frames/ModalContent';
 const modalRoot = document.getElementById('modal');
 
 interface IModal {
-	onClose: () => void;
-	onConfirm: () => void;
+	onClose?: () => void;
+	onConfirm?: () => void;
 	headerMessage?: string;
 	bodyMessage?: string;
 	bodyComponent?: any;
+	style?: any;
 }
 
 const Modal = (props: IModal) => {

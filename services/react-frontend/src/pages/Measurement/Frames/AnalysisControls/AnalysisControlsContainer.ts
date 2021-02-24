@@ -19,6 +19,7 @@ import {
 	getActiveControl,
 	getMqSettings,
 	getActiveMQ,
+	getExcelData,
 } from 'library/common/selectors/analysisSelectors';
 
 import Settings from './AnalysisControls';
@@ -28,6 +29,7 @@ const mapStateToProps = (store: RootState) => ({
 	activeControl: getActiveControl(store) as any,
 	mqSettings: getMqSettings(store) as any,
 	activeMQ: getActiveMQ(store) as any,
+	excelData: getExcelData(store) as any,
 });
 
 export default connect(mapStateToProps, {

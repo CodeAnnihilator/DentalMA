@@ -29,10 +29,13 @@ export interface ICoord {
 interface IAnalysis {
 	base64Img: string;
 	activeControl: number;
-	activeMQ: number;
+	activeMQ: any;
+	activeMQObj: any;
 	mqSettings: IMQSettings[];
 	coords: ICoord[];
 	updateCoordinates: (coords: ICoord[]) => void;
+	removeMQNode: (position: number) => void;
+	replaceMQNode: ({position, newMqId}: {position: number, newMqId: number}) => void;
 }
 
 const Analysis = ({
@@ -41,7 +44,10 @@ const Analysis = ({
 	activeMQ,
 	activeControl,
 	coords,
+	activeMQObj,
 	updateCoordinates,
+	removeMQNode,
+	replaceMQNode,
 }: IAnalysis) => {
 
 	const refPicture = useRef<HTMLImageElement>(null);
@@ -69,11 +75,19 @@ const Analysis = ({
 	});
 
 	useEffect(() => {
-		// if (!refPicture.current) return;
-		const {clientHeight, clientWidth}: any = refPicture.current;
-		console.log(clientWidth)
+		if (!refPicture.current) return;
+		const {clientHeight, clientWidth} = refPicture.current;
 		setState({vHeight: clientHeight, vWidth: clientWidth})
 	}, [windowWidth, windowHeight])
+
+
+	useEffect(() => {
+		const {canvas, ctx} = getCanvasAndContext(canvasRef);
+		if (!canvas || !ctx) return;
+		clearCanvas(canvas);
+		drawShapes(ctx, coords);
+	}, [coords])
+
 
 	const handleImgLoad = () => {
 		if (refPicture.current) {
@@ -127,6 +141,7 @@ const Analysis = ({
 			return;
 		}
 		const clickedNode = getClickedNode(coords, nextCoordObject);
+		setState({isContextOpen: false});
 		if (clickedNode !== null) {
 			const {offsetX, offsetY}: any = e.nativeEvent;
 			setState({
@@ -159,24 +174,33 @@ const Analysis = ({
 		maxHeight: state.vHeight,
 		maxWidth: state.vWidth,
 	};
+	
+	const ctxColorObj = state.contextObject ? mqSettings[state.contextObject.colorId] : null;
 
 	return (
 		<>
 			<div className={styles.canvasWrapper} style={boxSizes}>
 				{
-					state.isContextOpen && (
-						<ContextMenu coord={state.contextCoords} data={[
-							{
-								color: 'red',
-								text: 'remove MQ node',
-								onClick: () => console.log('remove node')
-							},
-							{
-								color: 'blue',
-								text: 'change MQ node color',
-								onClick: () => console.log('change color')
-							}
-						]} />
+					state.isContextOpen && state.contextObject && (
+						<ContextMenu
+							coord={state.contextCoords}
+							onClose={() => setState({isContextOpen: false})}
+							data={[
+								{
+									color: ctxColorObj?.color,
+									text: `remove ${ctxColorObj?.text}`,
+									onClick: () => removeMQNode(state.contextObject.i),
+								},
+								{
+									color: activeMQObj.color,
+									text: `change to ${activeMQObj.text}`,
+									onClick: () => replaceMQNode({
+										position: state.contextObject.i,
+										newMqId: activeMQObj.id
+									}),
+								}
+							]}
+						/>
 					)
 				}
 				{

@@ -7,10 +7,13 @@ import {
 	getMqSettings,
 	getActiveMQ,
 	getCoords,
+	getActiveMQObj,
 } from 'library/common/selectors/analysisSelectors';
 
 import {
 	updateCoordinates,
+	removeMQNode,
+	replaceMQNode,
 } from 'library/common/actions/analysisActions';
 
 import {
@@ -20,6 +23,7 @@ import {
 import Analysis from './Analysis';
 
 const mapStateToProps = (store: RootState) => ({
+	activeMQObj: getActiveMQObj(store) as any,
 	base64Img: getBase64Img(store) as any,
 	activeControl: getActiveControl(store) as any,
 	mqSettings: getMqSettings(store) as any,
@@ -29,4 +33,6 @@ const mapStateToProps = (store: RootState) => ({
 
 export default connect(mapStateToProps, {
 	updateCoordinates,
+	removeMQNode,
+	replaceMQNode,
 })(Analysis);

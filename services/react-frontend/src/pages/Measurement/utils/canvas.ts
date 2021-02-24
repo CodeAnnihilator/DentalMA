@@ -54,11 +54,11 @@ export const getOCRCropImage = async (imgRef: any, canvasImgRef: any, canvasCrop
 	}
 };
 
-const lenpoint = (coordA: number[], coordB: number[]) => {
+export const lenpoint = (coordA: number[], coordB: number[], devX=1, devY=1) => {
 	const a = coordA[0] - coordB[0];
 	const b = coordA[1] - coordB[1];
 
-	return Math.hypot(a, b);
+	return Math.hypot(a * devX, b * devY);
 };
 
 export const getClickedNode = (coords: ICoord[], nextCoord: ICoord) => {

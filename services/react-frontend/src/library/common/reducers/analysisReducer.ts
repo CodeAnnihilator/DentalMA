@@ -83,6 +83,22 @@ export default (state = initialState, action: AnalysisActions): AnalysisState =>
 				coords: action.payload,
 			};
 
+		case getType(actions.removeMQNode):
+			return {
+				...state,
+				coords: state.coords.filter((_, i) => i !== action.payload),
+			};
+
+		case getType(actions.replaceMQNode):
+			const {position, newMqId} = action.payload;
+			return {
+				...state,
+				coords: state.coords.map((c, i) => {
+					if (i !== position) return c;
+					return {...c, colorId: newMqId};
+				}),
+			};
+
 		default:
 			return state;
 	}
