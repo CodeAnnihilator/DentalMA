@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import {useHistory} from 'react-router-dom';
 import cn from 'classnames';
+import dayjs from 'dayjs';
 
 import Table from 'library/components/Table';
 
@@ -29,6 +30,11 @@ const Projects = ({
 
 	const tHead = projects.length ? Object.keys(projects[0]) : [];
 	const tData = projects.map((project: object) => Object.values(project));
+
+	tData.forEach((value: any[])  => {
+		value[3] = dayjs(value[3]).format('H:m:s DD/MM/YYYY')
+		value[4] = dayjs(value[4]).format('H:m:s DD/MM/YYYY')
+	});
 
 	return (
 		<div className={cn(styles.wrapper, {[styles.empty]: !projects.length})}>
