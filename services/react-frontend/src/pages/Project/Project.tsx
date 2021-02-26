@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
+import cn from 'classnames';
 
 import Table from 'library/components/Table';
 
@@ -32,12 +33,18 @@ const Project = ({
 	const tData = measurements.map((project: object) => Object.values(project));
 
 	return (
-		<div className={styles.wrapper}>
-			<Table
-				head={tHead}
-				data={tData}
-				onRowClick={onRowClick}
-			/>
+		<div className={cn(styles.wrapper, {[styles.empty]: !measurements.length})}>
+			{
+				measurements.length
+					? (
+						<Table
+							head={tHead}
+							data={tData}
+							onRowClick={onRowClick}
+						/> 
+					)
+					: <div>There are no measurements. You need to create one.</div>
+			}
 		</div>
 	);
 };
