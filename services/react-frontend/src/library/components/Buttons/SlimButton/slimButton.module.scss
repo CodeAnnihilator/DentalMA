@@ -1,11 +1,15 @@
 .wrapper {
-	font-size: 12px;
+    font-size: 12px;
     text-transform: uppercase;
     padding: 5px 20px;
-    border: 1px solid #7C9F8B;
+    border: 1px solid #e6c92b;
     display: flex;
     align-items: center;
-    background-color: #CBEDDA;
+    background-color: #ffec92;
     border-radius: 4px;
-    color: #35674a;
+    color: #988104;
+    cursor: pointer;
+    &:hover {
+        background-color: #ffe360;
+    }
 }

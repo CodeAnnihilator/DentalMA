@@ -1,4 +1,4 @@
-import { Table, Model, DataType, Column, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
+import { Table, Model, Column, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { Project } from '../projects/project.entity';
 import { Analysis } from '../analysis/analysis.entity';
 

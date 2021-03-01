@@ -1,14 +1,10 @@
-import { Table, Model, Column, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Model, Column, ForeignKey, BelongsTo, DataType } from 'sequelize-typescript';
 import { Measurement } from '../measurements/measurement.entity';
 
 @Table
 export class Analysis extends Model {
 
-  @Column
-  mq: number;
-
-  @Column
-  value: number;
+  @Column(DataType.JSON) data: any;
 
   @ForeignKey(() => Measurement)
   @Column

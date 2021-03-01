@@ -14,8 +14,8 @@ export const databaseProviders = [{
   provide: SEQUELIZE,
   useFactory: async () => {
     const config = getDbConfig(databaseConfig);
-    console.log(config)
     const sequelize = new Sequelize(config);
+    // sequelize.sync({force: true});
     sequelize.addModels([
       User,
       Project,

@@ -6,7 +6,8 @@ import {
 	getActiveCameraId,
 	getIsCalibrationActive,
 	getCalibration,
-	getPictureLabel
+	getPictureLabel,
+	getCalibrationRect,
 } from 'library/common/selectors/settingsSelectors';
 
 import {
@@ -24,6 +25,7 @@ const mapStateToProps = (store: RootState) => ({
 	isCalibrationActive: getIsCalibrationActive(store) as any,
 	pictureLabel: getPictureLabel(store) as any,
 	calibration: getCalibration(store) as any,
+	calibrationRect: getCalibrationRect(store) as any,
 });
 
 export default connect(mapStateToProps, {

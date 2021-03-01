@@ -25,7 +25,7 @@ const Projects = ({
 
 	const history = useHistory();
 	
-	const onRowClick = (id: number) => history.push(`/projects/${id}`);
+	const onRowClick = (row: any) => history.push(`/projects/${row[0]}`);
 
 	const tHead = projects.length ? Object.keys(projects[0]) : [];
 	const tData = projects.map((project: object) => Object.values(project));

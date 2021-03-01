@@ -24,3 +24,7 @@ export const removeMQNode =
 export const replaceMQNode =
 	createStandardAction(AnalysisTypes.REPLACE_MQ_NODE)
 		<any>();
+
+
+export const requestCompleteMeasurement = createStandardAction(AnalysisTypes.REQUEST_COMPLETE_MEASUREMENT)();
+export const saveMeasurementDone = createStandardAction(AnalysisTypes.SAVE_MEASUREMENT_DONE)();

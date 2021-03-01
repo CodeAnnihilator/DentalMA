@@ -1,4 +1,4 @@
-import { Table, Model, Column, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Model, Column, ForeignKey, BelongsTo, DataType } from 'sequelize-typescript';
 import { User } from '../users/user.entity';
 
 @Table
@@ -7,31 +7,16 @@ export class Camera extends Model {
   @Column
   device_name: string;
 
-  @Column
-  last_used_at: Date;
-
-  @Column
-  magnificationX1: number;
-
-  @Column
-  magnificationY1: number;
-
-  @Column
-  magnificationX2: number;
-
-  @Column
-  magnificationY2: number;
-
-  @Column
+  @Column({ type: DataType.DECIMAL(10, 2) })
   calibrationX1: number;
   
-  @Column
+  @Column({ type: DataType.DECIMAL(10, 2) })
   calibrationY1: number;
 
-  @Column
+  @Column({ type: DataType.DECIMAL(10, 2) })
   calibrationX2: number;
 
-  @Column
+  @Column({ type: DataType.DECIMAL(10, 2) })
   calibrationY2: number;
 
   @ForeignKey(() => User)

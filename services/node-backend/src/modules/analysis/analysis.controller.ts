@@ -10,8 +10,8 @@ export class AnalysisController {
 	constructor(private readonly analysisService: AnalysisService) { }
 
   @Post()
-  public async createAnalysis(@Body() analysis: AnalysisDto): Promise<Analysis> {
-    return await this.analysisService.createAnalysis(analysis)
+  public async createAnalysis(@Body() data: AnalysisDto): Promise<Analysis> {
+    return await this.analysisService.createAnalysis(data)
   }
 
   @Get()

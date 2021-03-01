@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Put } from '@nestjs/common';
 import { Request } from 'express';
 
 import { MeasurementDto } from './dto/measurements.dto';
@@ -14,6 +14,11 @@ export class MeasurementsController {
   @Post()
   public async createMeasurement(@Body() measurement: MeasurementDto): Promise<Measurement> {
     return await this.measurementService.createMeasurement(measurement)
+  }
+
+  @Put()
+  public async updateMeasurement(@Body() measurement: MeasurementDto): Promise<Measurement> {
+    return await this.measurementService.updateMeasurement(measurement)
   }
 
   @Get()

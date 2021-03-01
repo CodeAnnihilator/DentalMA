@@ -1,4 +1,3 @@
-import { saveBase64Img } from './../actions/settingsActions';
 /* eslint-disable import/no-anonymous-default-export */
 import {ActionType, getType} from 'typesafe-actions';
 
@@ -36,30 +35,9 @@ const initialState: SettingsState = {
 	yDeviation: 1,
 };
 
-const dummyState: SettingsState = {
-	cameras: [],
-	camera: '',
-	magnification: '200',
-	calibration: 300,
-	calibrationRect: [876.7961479698133, 945.3694672510649, 1206.7669799527755, 961.0148774615717],
-	pictureLabel: null,
-	meta: {
-		groupId: '123',
-		toothId: '123',
-		time: '123',
-		substrate: '123',
-		location: '123',
-	},
-	activeStep: 0,
-	isCalibrationActive: false,
-	base64Img: null,
-	xDeviation: 1,
-	yDeviation: 1,
-}
-
 export type SettingsActions = ActionType<typeof actions>;
 
-export default (state = dummyState, action: SettingsActions): SettingsState => {
+export default (state = initialState, action: SettingsActions): SettingsState => {
 	switch (action.type) {
 
 		case getType(actions.saveCameras):
@@ -79,7 +57,7 @@ export default (state = dummyState, action: SettingsActions): SettingsState => {
 		case getType(actions.setActiveCameraId):
 
 			return {
-				...dummyState,
+				...initialState,
 				cameras: state.cameras,
 				magnification: state.magnification,
 				camera: action.payload,
@@ -155,6 +133,25 @@ export default (state = dummyState, action: SettingsActions): SettingsState => {
 			return {
 				...state,
 				yDeviation: action.payload,
+			};
+
+		case getType(actions.saveMeasurementDone):
+
+			return {
+				...initialState,
+			};
+
+		case getType(actions.setCameraFromCache):
+
+			return {
+				...state,
+				camera: action.payload.device_name,
+				calibrationRect: [
+					parseFloat(action.payload.calibrationX1),
+					parseFloat(action.payload.calibrationY1),
+					parseFloat(action.payload.calibrationX2),
+					parseFloat(action.payload.calibrationY2),
+				]
 			};
 
 		default:

@@ -28,7 +28,7 @@ const Table = ({
 				<tbody>
 					{
 						data.map((row: any, rowIndex: number) => (
-							<tr key={rowIndex} onClick={() => onRowClick(row[0])}>
+							<tr key={rowIndex} onClick={() => onRowClick(row)}>
 								{
 									row.map((cell: (string | number), cellIndex: number) => (
 										<td key={cellIndex}>{cell}</td>

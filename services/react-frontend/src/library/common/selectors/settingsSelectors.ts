@@ -7,6 +7,7 @@ const getAllCameras = (state: RootState) => state.settings.cameras;
 
 export const getCalibration = (state: RootState) => state.settings.calibration;
 export const getActiveCameraId = (state: RootState) => state.settings.camera;
+export const getCalibrationRect = (state: RootState) => state.settings.calibrationRect;
 export const getIsCalibrationActive = (state: RootState) => state.settings.isCalibrationActive;
 export const getActiveStep = (state: RootState) => state.settings.activeStep;
 export const getPictureLabel = (state: RootState) => state.settings.pictureLabel;

@@ -27,6 +27,7 @@ import {
 	setMetaData,
 	setXDeviation,
 	setYDeviation,
+	requestLastCamera,
 } from 'library/common/actions/settingsActions';
 
 import Settings from './Settings';
@@ -56,4 +57,5 @@ export default connect(mapStateToProps, {
 	setMetaData,
 	setXDeviation,
 	setYDeviation,
+	requestLastCamera,
 })(Settings);

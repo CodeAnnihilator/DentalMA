@@ -16,7 +16,6 @@ export class ProjectsController {
 
   @Put()
   public async updateProject(@Body() project: ProjectDto): Promise<Project> {
-    console.log(project)
     return await this.projectService.updateProject(project)
   }
 

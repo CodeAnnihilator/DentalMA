@@ -12,6 +12,7 @@ import {
 
 import {
 	setActiveControl,
+	requestCompleteMeasurement,
 	setActiveMq,
 } from 'library/common/actions/analysisActions';
 
@@ -36,4 +37,5 @@ export default connect(mapStateToProps, {
 	setActiveStep,
 	setActiveControl,
 	setActiveMq,
+	requestCompleteMeasurement,
 })(Settings);

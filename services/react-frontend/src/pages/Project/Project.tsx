@@ -27,7 +27,10 @@ const Project = ({
 	const history = useHistory();
 	const path = history.location.pathname;
 
-	const onRowClick = (id: number) => history.push(`${path}/${id}`);
+	const onRowClick = (row: any) => {
+		if (typeof row[2] === 'number') return;
+		history.push(`${path}/${row[0]}`)
+	};
 
 	const tHead = measurements.length ? Object.keys(measurements[0]) : [];
 	const tData = measurements.map((project: object) => Object.values(project));

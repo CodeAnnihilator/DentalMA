@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import DropDown from 'library/components/DropDown';
 import TextInput from 'library/components/Input';
 import MetaButton from 'library/components/Buttons/MetaButton';
@@ -10,6 +11,7 @@ import checkIfAnyEmptyField from 'pages/Measurement/utils/checkIfAnyEmptyField';
 import MetaModalContent from './Frames/MetaModalContent';
 
 import styles from './settings.module.scss';
+import { useEffect } from 'react';
 
 interface ISettings {
 	readySteps: number[];
@@ -33,6 +35,7 @@ interface ISettings {
 	removePictureLabel?: () => void | any;
 	setPictureLabel?: (v: number) => void | any;
 	setActiveStep: (v: number) => void;
+	requestLastCamera: () => void;
 }
 
 const Settings = ({
@@ -55,6 +58,7 @@ const Settings = ({
 	setPictureLabel,
 	setActiveStep,
 	setMetaData,
+	requestLastCamera,
 	setXDeviation,
 	setYDeviation,
 }: ISettings) => {
@@ -63,6 +67,12 @@ const Settings = ({
 		isModalOpen: false,
 		meta,
 	})
+
+	useEffect(() => {
+		if (cameras.length) {
+			requestLastCamera();
+		}
+	}, [cameras]);
 
 	const onHandleInputChange = (cb: any) => (e: any) => {
 		if (e.target.validity.valid) {

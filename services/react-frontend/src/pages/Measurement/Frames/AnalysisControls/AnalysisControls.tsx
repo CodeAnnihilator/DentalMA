@@ -24,6 +24,7 @@ interface IAnalysisControls {
 	setActiveControl: (v: number) => void;
 	setActiveStep: (v: number) => void;
 	setActiveMq: (v: number) => void;
+	requestCompleteMeasurement: () => void;
 }
 
 const AnalysisControls = ({
@@ -32,6 +33,7 @@ const AnalysisControls = ({
 	mqSettings,
 	activeMQ,
 	excelData,
+	requestCompleteMeasurement,
 	setActiveControl,
 	setActiveStep,
 	setActiveMq,
@@ -64,7 +66,7 @@ const AnalysisControls = ({
 								<Table
 									head={tHead}
 									data={tData}
-									onRowClick={() => console.log('asdasd')}
+									onRowClick={() => console.log('row clicked')}
 								/>
 							</>
 						)}
@@ -107,7 +109,14 @@ const AnalysisControls = ({
 					onClick={() => setState({isTableModalOpen: true})}
 				/>
 				<Devider type='double' />
-				<SlimButton text={'complete'} />
+				{
+					tData.length > 1 && (
+						<SlimButton
+							text='complete' 
+							onClick={requestCompleteMeasurement}
+						/>
+					)
+				}
 			</div>
 		</>
 	);

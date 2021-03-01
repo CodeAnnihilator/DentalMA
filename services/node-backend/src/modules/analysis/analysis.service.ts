@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpStatus, HttpException } from '@nestjs/common';
 
 import { AnalysisDto } from './dto/analysis.dto';
 import { Analysis } from './analysis.entity';
@@ -10,6 +10,12 @@ export class AnalysisService {
   constructor(@Inject(ANALYSIS_REPOSITORY) private readonly analysisRepository: typeof Analysis) {}
 
   async createAnalysis(analysis: AnalysisDto): Promise<Analysis> {
+    if (!analysis.measurementId) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: 'provide measurement ID'
+      }, HttpStatus.BAD_REQUEST);
+    }
     return await this.analysisRepository
       .create<Analysis>(analysis);
   }

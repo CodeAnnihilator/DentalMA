@@ -13,6 +13,12 @@ export class MeasurementsService {
       .create<Measurement>(measurement);
   }
 
+  async updateMeasurement(measurement: MeasurementDto): Promise<Measurement> {
+    return await this.measurementRepository
+      .update<Measurement>(measurement, { where: { id: measurement.id } })
+      .then(async _ => await this.getMeasurementById(measurement.id))
+  }
+
   async getAllMeasurements(projectId: number): Promise<Measurement[]> {
     return await this.measurementRepository
       .findAll<Measurement>({ where: { projectId } });

@@ -1,4 +1,4 @@
 export class AnalysisDto {
-  readonly mq: number;
-  readonly value: number;
+  readonly measurementId: number;
+  readonly data: any;
 }

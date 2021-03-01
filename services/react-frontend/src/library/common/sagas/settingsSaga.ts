@@ -2,10 +2,16 @@ import {call, put, select, takeLatest} from 'redux-saga/effects';
 import dayjs from 'dayjs';
 
 import {SettingsTypes} from '../types/settingsTypes';
-import {magnificationOCRRequest} from '../apis/settings';
+import {
+	magnificationOCRRequest,
+	lastCameraRequest,
+} from '../apis/settings';
+
+import { getIsUser } from 'library/common/selectors/authSelectors';
 import {
 	getActiveCameraId,
 	getIsCalibrationActive,
+	getCameras,
 } from '../selectors/settingsSelectors';
 import {
 	requestOCRMeasurement,
@@ -14,6 +20,8 @@ import {
 	setIsCalibrationActiveSuccess,
 	setActiveCameraId,
 	setPictureLabelSuccess,
+	requestLastCamera,
+	setCameraFromCache,
 } from '../actions/settingsActions';
 
 function* requestOCRMeasurementSaga(action: ReturnType<typeof requestOCRMeasurement>) {
@@ -51,9 +59,24 @@ function* setActiveCameraIdSaga(action: ReturnType<typeof setActiveCameraId>) {
 	}
 }
 
+function* requestLastCameraSaga(action: ReturnType<typeof requestLastCamera>) {
+	try {
+		const cameras = yield select(getCameras);
+		const {data: lastCamera} = yield call(lastCameraRequest);
+		if (!lastCamera.length) return;
+		const isMatch = cameras.some((c: any) => c.deviceId === lastCamera.device_name);
+		if (isMatch) {
+			yield put(setCameraFromCache(lastCamera[0]));
+		}
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 export default function* settingsSaga() {
 	yield takeLatest(SettingsTypes.REQUEST_OCR_MEASUREMENT, requestOCRMeasurementSaga);
 	yield takeLatest(SettingsTypes.SET_IS_CALIBRATION_ACTIVE, setIsCalibrationActiveSaga);
 	yield takeLatest(SettingsTypes.SET_ACTIVE_CAMERA_ID, setActiveCameraIdSaga);
 	yield takeLatest(SettingsTypes.SET_PICTURE_LABEL, setActiveCameraIdSaga);
+	yield takeLatest(SettingsTypes.REQUEST_LAST_CAMERA, requestLastCameraSaga);
 }

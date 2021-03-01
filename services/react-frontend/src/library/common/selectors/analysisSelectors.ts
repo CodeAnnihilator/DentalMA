@@ -40,6 +40,7 @@ export const getExcelData = createSelector(
 			const distance = `${totalMQDistance.toFixed(2)}um`;
 			return {...meta, ...c, distance, percentage};
 		})
+		console.log(mqsWithDistances)
 
 		return mqsWithDistances;
 	}

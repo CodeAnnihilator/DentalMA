@@ -55,6 +55,12 @@ export const setYDeviation =
 	createStandardAction(SettingsTypes.SET_Y_DEVIATION)
 		<number>();
 
+export const setCameraFromCache =
+	createStandardAction(SettingsTypes.SET_CAMERA_FROM_CACHE)
+		<any>();
+
 export const setPictureLabel = createStandardAction(SettingsTypes.SET_PICTURE_LABEL)();
 export const removeCalibration = createStandardAction(SettingsTypes.REMOVE_CALIBRATION)();
 export const removePictureLabel = createStandardAction(SettingsTypes.REMOVE_PICTURE_LABEL)();
+export const saveMeasurementDone = createStandardAction(SettingsTypes.SAVE_MEASUREMENT_DONE)();
+export const requestLastCamera = createStandardAction(SettingsTypes.REQUEST_LAST_CAMERA)();

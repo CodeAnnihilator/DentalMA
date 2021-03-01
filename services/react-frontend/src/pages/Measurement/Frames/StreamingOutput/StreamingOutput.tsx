@@ -19,6 +19,7 @@ interface IStreamingOutput {
 	isCalibrationActive: boolean;
 	calibration: number;
 	pictureLabel: string;
+	calibrationRect: number[];
 	saveCameras: (cameras: object[]) => void;
 	requestOCRMeasurement: (measurement: any) => void;
 	setIsCalibrationActive: (isActive: boolean) => void;
@@ -30,6 +31,7 @@ const StreamingOutput = ({
 	isCalibrationActive,
 	calibration,
 	pictureLabel,
+	calibrationRect,
 	saveCameras,
 	requestOCRMeasurement,
 	setIsCalibrationActive,
@@ -80,10 +82,17 @@ const StreamingOutput = ({
 	}, [activeCameraId]);
 
 	useEffect(() => {
-		if (picture !== null) {
-			saveBase64Img(picture);
-		}
-	}, [picture]);
+		(async function() {
+			if (picture !== null) {
+				saveBase64Img(picture);
+				if (calibrationRect) {
+					const img = await getOCRCropImage(refPicture, refPicureCanvas, refServiceCanvas, calibrationRect);
+					requestOCRMeasurement({coords: calibrationRect, img});
+					setIsCalibrationActive(false);
+				}
+			}
+		})()
+	}, [picture, calibrationRect]);
 
 	const handleSetNextStream = () => handleNextStream(activeCameraId, refStream, stream, setNextStream);
 	const handleSetTakePicture = () => handleTakePicture(refStream, refServiceCanvas, stream, setPicture);
