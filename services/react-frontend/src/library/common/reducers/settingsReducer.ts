@@ -55,7 +55,7 @@ export default (state = initialState, action: SettingsActions): SettingsState =>
 			};
 
 		case getType(actions.setActiveCameraId):
-
+			if (action.payload === state.camera) return state;
 			return {
 				...initialState,
 				cameras: state.cameras,
@@ -152,6 +152,13 @@ export default (state = initialState, action: SettingsActions): SettingsState =>
 					parseFloat(action.payload.calibrationX2),
 					parseFloat(action.payload.calibrationY2),
 				]
+			};
+
+		case getType(actions.setMetaFromCache):
+
+			return {
+				...state,
+				meta: action.payload,
 			};
 
 		default:

@@ -6,3 +6,5 @@ export const magnificationOCRRequest = (formData: any) => ocrFetch.post('/detect
 export const getMeasurementsRequest = (projectId: number) => fetch.get(`/measurements?projectId=${projectId}`);
 
 export const lastCameraRequest = () => fetch.get('/cameras');
+
+export const lastMeasurementRequest = () => fetch.get('/measurements/last');

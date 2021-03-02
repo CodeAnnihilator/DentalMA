@@ -59,6 +59,10 @@ export const setCameraFromCache =
 	createStandardAction(SettingsTypes.SET_CAMERA_FROM_CACHE)
 		<any>();
 
+export const setMetaFromCache =
+	createStandardAction(SettingsTypes.SET_META_FROM_CACHE)
+		<any>();
+
 export const setPictureLabel = createStandardAction(SettingsTypes.SET_PICTURE_LABEL)();
 export const removeCalibration = createStandardAction(SettingsTypes.REMOVE_CALIBRATION)();
 export const removePictureLabel = createStandardAction(SettingsTypes.REMOVE_PICTURE_LABEL)();

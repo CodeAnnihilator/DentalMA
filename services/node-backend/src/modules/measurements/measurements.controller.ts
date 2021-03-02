@@ -26,6 +26,11 @@ export class MeasurementsController {
     return await this.measurementService.getAllMeasurements(query.projectId);
   }
 
+  @Get('/last')
+  public async getLastMeasurement(): Promise<Measurement[]> {
+    return await this.measurementService.getLastMeasurement();
+  }
+
   @Get(':id')
   public async getMeasurementById(@Param('id') id: number): Promise<Measurement> {
     return await this.measurementService.getMeasurementById(id);

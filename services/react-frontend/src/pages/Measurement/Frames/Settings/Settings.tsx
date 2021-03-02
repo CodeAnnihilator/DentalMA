@@ -123,20 +123,6 @@ const Settings = ({
 				onClick={() => setState({isModalOpen: true})}
 			/>
 			<TextInput
-				isCompleted={!!xDeviation}
-				value={xDeviation}
-				pattern='[0-9\.]*'
-				placeholder='x deviation...'
-				onChange={onHandleInputChange(setXDeviation)}
-			/>
-			<TextInput
-				isCompleted={!!yDeviation}
-				value={yDeviation}
-				pattern='[0-9\.]*'
-				placeholder='y deviation...'
-				onChange={onHandleInputChange(setYDeviation)}
-			/>
-			<TextInput
 				isCompleted={!!magnification}
 				value={magnification}
 				pattern='[0-9]*'
@@ -154,6 +140,20 @@ const Settings = ({
 					/>
 				)
 			}
+			<TextInput
+				isCompleted={!!xDeviation}
+				value={xDeviation}
+				pattern='[0-9\.]*'
+				placeholder='x deviation...'
+				onChange={onHandleInputChange(setXDeviation)}
+			/>
+			<TextInput
+				isCompleted={!!yDeviation}
+				value={yDeviation}
+				pattern='[0-9\.]*'
+				placeholder='y deviation...'
+				onChange={onHandleInputChange(setYDeviation)}
+			/>
 			<DropDown
 				isCompleted={!!activeCameraId}
 				options={cameras}

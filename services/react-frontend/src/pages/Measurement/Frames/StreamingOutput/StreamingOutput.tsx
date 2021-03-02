@@ -86,9 +86,20 @@ const StreamingOutput = ({
 			if (picture !== null) {
 				saveBase64Img(picture);
 				if (calibrationRect) {
+					// TODO: add isLoaded
 					const img = await getOCRCropImage(refPicture, refPicureCanvas, refServiceCanvas, calibrationRect);
 					requestOCRMeasurement({coords: calibrationRect, img});
 					setIsCalibrationActive(false);
+					const {canvas, ctx} = getCanvasAndContext(refMeasureCanvas);
+					if (!canvas || !ctx) return;
+					const nextRect = calibrationRect.map((v, i, arr) => {
+						if (i <= 1) return v;
+						if (i === 2) return v - arr[0];
+						return v - arr[1];
+					});
+					clearCanvas(canvas);
+					ctx.strokeStyle = '#3bff65';
+					ctx.strokeRect(...nextRect);
 				}
 			}
 		})()
@@ -101,7 +112,7 @@ const StreamingOutput = ({
 
 	const drawBoundingRect = (ctx: CanvasRenderingContext2D, nextCoord: any) => {
 		const x1 = mCoords[0];
-		const y1 = mCoords[1]
+		const y1 = mCoords[1];
 		const w = nextCoord[0] - mCoords[0];
 		const h = nextCoord[1] - mCoords[1];
 		ctx.strokeStyle = '#3bff65';

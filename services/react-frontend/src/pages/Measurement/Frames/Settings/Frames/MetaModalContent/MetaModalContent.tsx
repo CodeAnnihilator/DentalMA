@@ -34,13 +34,16 @@ const MetaModalContent = ({
 	
 	return (
 		<div className={styles.wrapper}>
+			<label className={styles.label} htmlFor='groupId'>Group ID</label>
 			<input
+				id='groupId'
 				pattern='[0-9]*'
 				className={cn(styles.input, {[styles.completed]: !!state.groupId})}
 				onChange={handleChange('groupId')}
 				value={state.groupId}
 				placeholder='enter groupId...'
 			/>
+			<label className={styles.label} htmlFor='groupId'>Tooth ID</label>
 			<input
 				pattern='[0-9]*'
 				className={cn(styles.input, {[styles.completed]: !!state.toothId})}
@@ -48,6 +51,7 @@ const MetaModalContent = ({
 				value={state.toothId}
 				placeholder='enter toothId...'
 			/>
+			<label className={styles.label} htmlFor='groupId'>Time</label>
 			<input
 				pattern='[0-9]*'
 				className={cn(styles.input, {[styles.completed]: !!state.time})}
@@ -55,6 +59,7 @@ const MetaModalContent = ({
 				value={state.time}
 				placeholder='enter time...'
 			/>
+			<label className={styles.label} htmlFor='groupId'>Substrate</label>
 			<input
 				pattern='[0-9]*'
 				className={cn(styles.input, {[styles.completed]: !!state.substrate})}
@@ -62,6 +67,7 @@ const MetaModalContent = ({
 				value={state.substrate}
 				placeholder='enter substrate...'
 			/>
+			<label className={styles.label} htmlFor='groupId'>Location</label>
 			<input
 				pattern='[0-9]*'
 				className={cn(styles.input, {[styles.completed]: !!state.location})}

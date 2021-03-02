@@ -2,17 +2,20 @@ import {call, put, select, takeLatest} from 'redux-saga/effects';
 import dayjs from 'dayjs';
 
 import {SettingsTypes} from '../types/settingsTypes';
+
 import {
 	magnificationOCRRequest,
 	lastCameraRequest,
+	lastMeasurementRequest,
 } from '../apis/settings';
 
-import { getIsUser } from 'library/common/selectors/authSelectors';
 import {
 	getActiveCameraId,
 	getIsCalibrationActive,
 	getCameras,
+	getPictureLabel,
 } from '../selectors/settingsSelectors';
+
 import {
 	requestOCRMeasurement,
 	requestOCRMeasurementSuccess,
@@ -22,6 +25,7 @@ import {
 	setPictureLabelSuccess,
 	requestLastCamera,
 	setCameraFromCache,
+	setMetaFromCache,
 } from '../actions/settingsActions';
 
 function* requestOCRMeasurementSaga(action: ReturnType<typeof requestOCRMeasurement>) {
@@ -50,6 +54,9 @@ function* setIsCalibrationActiveSaga(action: ReturnType<typeof setIsCalibrationA
 
 function* setActiveCameraIdSaga(action: ReturnType<typeof setActiveCameraId>) {
 	try {
+		const cameraId = yield select(getActiveCameraId);
+		const pictureLabel = yield select(getPictureLabel);
+		if (action.payload === cameraId && pictureLabel) return;
 		const localizedFormat = require('dayjs/plugin/localizedFormat');
 		dayjs.extend(localizedFormat);
 		const timeLabel = dayjs(new Date()).format('LLL');
@@ -62,12 +69,19 @@ function* setActiveCameraIdSaga(action: ReturnType<typeof setActiveCameraId>) {
 function* requestLastCameraSaga(action: ReturnType<typeof requestLastCamera>) {
 	try {
 		const cameras = yield select(getCameras);
+		const cameraId = yield select(getActiveCameraId);
+		if (cameraId) return;
 		const {data: lastCamera} = yield call(lastCameraRequest);
-		if (!lastCamera.length) return;
+		const {data: lastMeasurement} = yield call(lastMeasurementRequest);
+		console.log(lastMeasurement);
+		if (!lastCamera.length || !lastMeasurement.length) return;
 		const isMatch = cameras.some((c: any) => c.deviceId === lastCamera.device_name);
 		if (isMatch) {
+			yield put(setActiveCameraId(lastCamera[0].device_name))
 			yield put(setCameraFromCache(lastCamera[0]));
 		}
+		const {createdAt, updatedAt, projectId, name, id, ...meta} = lastMeasurement[0];
+		yield put(setMetaFromCache(meta));
 	} catch (error) {
 		console.log(error);
 	}

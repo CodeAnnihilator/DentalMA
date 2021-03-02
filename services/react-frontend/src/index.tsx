@@ -8,6 +8,7 @@ import configureI18n from 'core/i18n/configureI18n';
 
 import RoutesContainer from 'core/RoutesContainer';
 
+import 'react-notifications-component/dist/theme.css'
 import 'resources/styles/index.scss';
 
 async function render() {

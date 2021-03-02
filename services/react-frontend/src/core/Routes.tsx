@@ -2,6 +2,7 @@
 import React, {useEffect} from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {useLocation} from 'react-router-dom';
+import ReactNotification from 'react-notifications-component';
 
 import Header from 'library/components/Header';
 import BreadcrumbsContainer from 'library/components/Breadcrumbs/BreadcrumbsContainer';
@@ -37,6 +38,7 @@ const Routes: React.FC<IRoutes> = ({
 
 	return (
 		<>
+			<ReactNotification />
 			<Header />
 			<SubHeader bottomBorder>
 				<BreadcrumbsContainer />

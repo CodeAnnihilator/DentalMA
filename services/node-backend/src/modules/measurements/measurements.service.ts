@@ -2,6 +2,7 @@ import { MeasurementDto } from './dto/measurements.dto';
 import { Injectable, Inject } from '@nestjs/common';
 import { Measurement } from './measurement.entity';
 import { MEASUREMENT_REPOSITORY } from 'src/modules/core/constants';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class MeasurementsService {
@@ -22,6 +23,15 @@ export class MeasurementsService {
   async getAllMeasurements(projectId: number): Promise<Measurement[]> {
     return await this.measurementRepository
       .findAll<Measurement>({ where: { projectId } });
+  }
+
+  async getLastMeasurement(): Promise<Measurement[]> {
+    return await this.measurementRepository.findAll<Measurement>({
+      // where: { userId: 1 },
+      where: { groupId: { [Op.not]: null } },
+      order:[['createdAt','DESC']],
+      limit: 1,
+    });
   }
 
   async getMeasurementById(id: number): Promise<Measurement> {

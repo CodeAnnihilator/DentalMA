@@ -1927,6 +1927,13 @@
   dependencies:
     "@types/react" "^16"
 
+"@types/react-notifications-component@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@types/react-notifications-component/-/react-notifications-component-2.4.0.tgz#b70516a7f17d83ee86843a8940866153735412a0"
+  integrity sha512-MT+QOXgoskK76oRFTj8cO5ImWhE7KuSvmHj96dOgSSmJfiACZnaOOPoYPFuXr5rGBXVwYNE9o5iWMv115uGlkw==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@^7.1.2":
   version "7.1.16"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.16.tgz#0fbd04c2500c12105494c83d4a3e45c084e3cb21"
@@ -10093,6 +10100,11 @@ react-is@^17.0.1:
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
+
+react-notifications-component@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-notifications-component/-/react-notifications-component-3.0.4.tgz#dfee512d7cc77228874559a568ff9a38f56f96de"
+  integrity sha512-agG/lDRwZ16o2Jqt9BkdG5QHn6L/+WD2NYsuQ5C/MP8KjcLj+ddgUaa6PbjSGpHqfeBrE4LVkKh2L5tf4kdmjw==
 
 react-redux@^7.1.0:
   version "7.2.2"

@@ -26,6 +26,7 @@ export const getActiveCameraLabel = createSelector(
 	(cameras, activeCameraId) => {
 		if (!activeCameraId) return 'select camera...';
 		const camera = cameras.find((c: any) => c.value === activeCameraId);
+		if (!camera) return 'no camera';
 		return camera.label;
 	}
 )

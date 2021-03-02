@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import cn from 'classnames';
 
 import Table from 'library/components/Table';
+import formatDatesInArray from 'library/utilities/formatDatesInArray';
 
 import styles from './projects.module.scss';
 
@@ -28,7 +29,7 @@ const Projects = ({
 	const onRowClick = (row: any) => history.push(`/projects/${row[0]}`);
 
 	const tHead = projects.length ? Object.keys(projects[0]) : [];
-	const tData = projects.map((project: object) => Object.values(project));
+	const tData = formatDatesInArray(projects, ['createdAt', 'updatedAt'], 'H:m:s DD/MM/YYYY');
 
 	return (
 		<div className={cn(styles.wrapper, {[styles.empty]: !projects.length})}>
