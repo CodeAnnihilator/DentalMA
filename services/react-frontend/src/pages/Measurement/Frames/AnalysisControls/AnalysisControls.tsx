@@ -8,6 +8,7 @@ import Modal from 'library/components/Modal';
 import Table from 'library/components/Table';
 import Dot from 'library/components/Dot';
 import useObjectState from 'library/common/hooks/useObjectState';
+import useEventListener from 'library/common/hooks/useEventListener';
 
 import moveSVG from 'resources/icons/move.svg';
 import connectionSVG from 'resources/icons/connection.svg';
@@ -41,6 +42,14 @@ const AnalysisControls = ({
 
 	let settingsLabel = `SETTINGS: ${readySteps[0]}/${readySteps[1]}`;
 	const stepOptions = [{label: settingsLabel, value: 0}, {label: 'MEASUREMENT', value: 1}]
+
+	const onKeyDownHandler = ({key}: any) => {
+		console.log(key)
+		const isValidKey = new Array(7).fill(null).map((_, i) => i + 1).some(v => v === parseInt(key, 10));
+		isValidKey && setActiveMq(parseInt(key, 10) - 1);
+	}
+
+	useEventListener('keydown', onKeyDownHandler);
 
 	const [state, setState] = useObjectState({
 		isTableModalOpen: false,
