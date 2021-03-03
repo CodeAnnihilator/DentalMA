@@ -11,10 +11,12 @@ const pushTo = (index: number, arr: string[]) => (`/${arr.slice(0, index + 1).jo
 
 interface ILinkedPath {
 	projectName: string;
+	measurementName: string;
 }
 
 const LinkedPath = ({
 	projectName,
+	measurementName,
 }: ILinkedPath) => {
 
 	const history = useHistory();
@@ -23,7 +25,7 @@ const LinkedPath = ({
 
 	const setBreadcrumbLabel = (sub: string, index: number) => {
 		if (index === 1) return projectName;
-		if (index === 2) return `measurement (no name) #${sub}`;
+		if (index === 2) return 'measurement: ' + (measurementName ? measurementName : `(no name) #${sub}`);
 	
 		return sub;
 	};

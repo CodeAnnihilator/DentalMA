@@ -6,3 +6,4 @@ export const getCurrentProjectName = (state: RootState) => state.projects.curren
 export const getIsProjectLoaded = (state: RootState) => !state.projects.isLoading;
 export const getMeasurements = (state: RootState) => state.project.data;
 export const getCurrentMeasurement = (state: RootState) => state.measurement.currentMeasurement;
+export const getCurrentMeasurementName = (state: RootState) => state.measurement.currentMeasurement?.name;

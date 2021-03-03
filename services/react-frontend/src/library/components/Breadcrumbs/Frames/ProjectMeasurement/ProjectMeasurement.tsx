@@ -3,11 +3,13 @@ import Modal from 'library/components/Modal';
 import useObjectState from 'library/common/hooks/useObjectState';
 
 interface IProjectMeasurement {
+	measurementName: string;
 	editMeasurementName: (value: string) => void;
 	deleteMeasurement: () => void;
 }
 
 const ProjectMeasurement = ({
+	measurementName,
 	editMeasurementName,
 	deleteMeasurement,
 }: IProjectMeasurement) => {
@@ -19,6 +21,7 @@ const ProjectMeasurement = ({
 	return (
 		<>
 			<TextWithActionIcon
+				value={measurementName}
 				placeholder='edit measurement name'
 				onConfirm={editMeasurementName}
 				onRemove={() => setState({isModalOpen: true})}

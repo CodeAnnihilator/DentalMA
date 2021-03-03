@@ -7,13 +7,11 @@ import ReactNotification from 'react-notifications-component';
 import Header from 'library/components/Header';
 import BreadcrumbsContainer from 'library/components/Breadcrumbs/BreadcrumbsContainer';
 import SubHeader from 'library/components/SubHeader';
+import ExcelMQsContainer from 'library/components/ExcelMQs/ExcelMQsContainer';
 
 import ProjectsContainer from 'pages/Projects/ProjectsContainer';
 import ProjectContainer from 'pages/Project/ProjectContainer';
 import MeasurementContainer from 'pages/Measurement/MeasurementContainer';
-import Button from 'library/components/Buttons/Button';
-
-import MeasurementSVG from 'resources/icons/measurement.svg';
 
 interface IRoutes {
 	isUser: null | object;
@@ -42,15 +40,7 @@ const Routes: React.FC<IRoutes> = ({
 			<Header />
 			<SubHeader bottomBorder>
 				<BreadcrumbsContainer />
-				{
-					isPagePath && (
-						<Button
-							text='Create Measurement'
-							icon={MeasurementSVG}
-							onClick={createMeasurement}
-						/>
-					)
-				}
+				{ isPagePath && <ExcelMQsContainer onCreateMeasurement={createMeasurement} />}
 			</SubHeader>
 			<Switch>
 				<Redirect exact from='/' to='projects' />

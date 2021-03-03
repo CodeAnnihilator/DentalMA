@@ -1,5 +1,6 @@
 import {call, put, select, takeLatest} from 'redux-saga/effects';
 import {push} from 'connected-react-router';
+import {store} from 'react-notifications-component';
 
 import {getIsUser} from '../selectors/authSelectors';
 
@@ -69,8 +70,24 @@ function* requestProjectByIdSaga(action: ReturnType<typeof requestProjectById>) 
 	try {
 		const {data: project} = yield call(() => getProjectByIdRequest(action.payload));
 		yield put(requestProjectByIdSuccess(project));
-	} catch (error) {
-		console.log(error);
+	} catch (err) {
+		const {status, error} = err.response.data;
+		if (status === 400) {
+			yield put(push('/projects'));
+			store.addNotification({
+				title: `Issue with project: ${action.payload}`,
+				message: error,
+				type: 'danger',
+				insert: 'top',
+				container: 'top-right',
+				animationIn: ['animate__animated', 'animate__fadeIn'],
+				animationOut: ['animate__animated', 'animate__fadeOut'],
+				dismiss: {
+					duration: 3000,
+					onScreen: true
+				}
+			});
+		}
 	}
 }
 

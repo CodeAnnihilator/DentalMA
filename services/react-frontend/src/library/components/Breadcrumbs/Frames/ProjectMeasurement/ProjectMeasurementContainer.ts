@@ -1,5 +1,11 @@
 import {connect} from 'react-redux';
 
+import {RootState} from 'core/store/configureStore';
+
+import {
+	getCurrentMeasurementName,
+} from 'library/common/selectors/projectSelectors';
+
 import {
 	editMeasurementName,
 	deleteMeasurement,
@@ -7,7 +13,11 @@ import {
 
 import ProjectMeasurement from './ProjectMeasurement';
 
-export default connect(null, {
+const mapStateToProps = (store: RootState) => ({
+	measurementName: getCurrentMeasurementName(store) as string,
+});
+
+export default connect(mapStateToProps, {
 	editMeasurementName,
 	deleteMeasurement,
 })(ProjectMeasurement);

@@ -82,6 +82,12 @@ const StreamingOutput = ({
 	}, [activeCameraId]);
 
 	useEffect(() => {
+		if (pictureLabel) {
+			handleSetTakePicture();
+		}
+	}, [pictureLabel])
+
+	useEffect(() => {
 		(async function() {
 			if (picture !== null) {
 				saveBase64Img(picture);

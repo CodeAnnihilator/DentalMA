@@ -15,12 +15,14 @@ interface IBreadcrumbs {
 	requestProjectById: (id: number) => void;
 	requestMeasurementById: (id: number) => void;
 	projectName: string;
+	measurementName: string;
 }
 
 const Breadcrumbs = ({
 	requestProjectById,
 	requestMeasurementById,
 	projectName,
+	measurementName,
 }: IBreadcrumbs) => {
 
 	const {pathname} = useLocation();
@@ -40,7 +42,10 @@ const Breadcrumbs = ({
 
 	return (
 		<div className={styles.wrapper}>
-			<LinkedPath projectName={projectName} />
+			<LinkedPath
+				projectName={projectName}
+				measurementName={measurementName}
+			/>
 			{type === 'newProject' && <NewProjectContainer />}
 			{type === 'currentProject' && <CurrentProjectContainer />}
 			{type === 'projectMeasurement' && <ProjectMeasurementContainer />}

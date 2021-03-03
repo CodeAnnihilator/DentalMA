@@ -4,7 +4,7 @@ import {ActionType, getType} from 'typesafe-actions';
 import * as actions from '../actions/measurementActions';
 
 export type MeasurementState = Readonly<{
-	currentMeasurement: null | object;
+	currentMeasurement: any;
 }>;
 
 const initialState: MeasurementState = {
@@ -20,6 +20,17 @@ export default (state = initialState, action: MeasurementActions): MeasurementSt
 			return {
 				...state,
 				currentMeasurement: action.payload,
+			};
+
+		case getType(actions.editMeasurementNameSuccess):
+			return {
+				...state,
+				currentMeasurement: action.payload,
+			};
+
+		case getType(actions.deleteMeasurementSuccess):
+			return {
+				...initialState,
 			};
 
 		default:

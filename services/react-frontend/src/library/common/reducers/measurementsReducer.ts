@@ -1,6 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 import {ActionType, getType} from 'typesafe-actions';
 
+import sortByDate from 'library/utilities/sortByDate';
+
 import * as actions from '../actions/projectActions';
 
 export type MeasurementsState = Readonly<{
@@ -17,10 +19,9 @@ export default (state = initialState, action: MeasurementsActions): Measurements
 	switch (action.type) {
 
 		case getType(actions.requestMeasurementsSuccess):
-
 			return {
 				...state,
-				data: [...initialState.data, ...action.payload],
+				data: sortByDate([...initialState.data, ...action.payload], 'updatedAt', 'DESC'),
 			};
 
 		default:

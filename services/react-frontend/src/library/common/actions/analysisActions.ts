@@ -26,5 +26,10 @@ export const replaceMQNode =
 		<any>();
 
 
+export const requestExcelMQsSuccess =
+	createStandardAction(AnalysisTypes.REQUEST_EXCEL_MQS_SUCCESS)
+		<any>();
+		
 export const requestCompleteMeasurement = createStandardAction(AnalysisTypes.REQUEST_COMPLETE_MEASUREMENT)();
 export const saveMeasurementDone = createStandardAction(AnalysisTypes.SAVE_MEASUREMENT_DONE)();
+export const requestExcelMQs = createStandardAction(AnalysisTypes.REQUEST_EXCEL_MQS)();

@@ -1,5 +1,6 @@
 import {call, put, select, takeLatest} from 'redux-saga/effects';
 import {push} from 'connected-react-router';
+import {store} from 'react-notifications-component';
 
 import {
 	MeasurementTypes,
@@ -7,11 +8,15 @@ import {
 
 import {
 	getCurrentProject,
+	getCurrentMeasurement,
 } from '../selectors/projectSelectors';
+import {getLocation} from './../selectors/routerSelectors';
 
 import {
 	createMeasurementRequest,
 	getMeasurementByIdRequest,
+	saveCurrentMeasurementRequest,
+	deleteMeasurementRequest,
 } from '../apis/measurement';
 
 import {
@@ -21,6 +26,8 @@ import {
 	deleteMeasurement,
 	requestMeasurementById,
 	requestMeasurementByIdSuccess,
+	editMeasurementNameSuccess,
+	deleteMeasurementSuccess,
 } from '../actions/measurementActions';
 
 function* createMeasurementSaga(action: ReturnType<typeof createMeasurement>) {
@@ -36,12 +43,10 @@ function* createMeasurementSaga(action: ReturnType<typeof createMeasurement>) {
 
 function* editMeasurementNameSaga(action: ReturnType<typeof editMeasurementName>) {
 	try {
-		const {id: project} = yield select(getCurrentProject);
-		// const measurement = yield select(getCurrentMeasurement);
-		// const {data: updatedProject} = yield call(() => editProjectRequest(projectToUpdate));
-		// const projectsToUpdate = projects.map((p: IProject) => p.id === project.id ? updatedProject : p);
-		// yield put(editProjectNameSuccess(updatedProject));
-		// yield put(requestProjectsSuccess(projectsToUpdate));
+		const measurement = yield select(getCurrentMeasurement);
+		const measurementToUpdate = Object.assign(measurement, {name: action.payload})
+		const {data: updatedMeasurement} = yield call(() => saveCurrentMeasurementRequest(measurementToUpdate));
+		yield put(editMeasurementNameSuccess(updatedMeasurement));
 	} catch (error) {
 		console.log(error);
 	}
@@ -49,10 +54,12 @@ function* editMeasurementNameSaga(action: ReturnType<typeof editMeasurementName>
 
 function* deleteMeasurementSaga(action: ReturnType<typeof deleteMeasurement>) {
 	try {
-		// const {id: projectId} = yield select(getCurrentProject);
-		// const {data: measurement} = yield call(() => createMeasurementRequest({projectId}));
-		// yield put(createMeasurementSuccess(measurement));
-		// yield put(push(`/projects/${projectId}/${measurement.id}`));
+		const measurement = yield select(getCurrentMeasurement);
+		const path = yield select(getLocation);
+		const pushTo = path.split('/').filter((s: string, i: number, arr: string[]) => !!arr[i + 1]).join('/');
+		yield call(deleteMeasurementRequest, measurement.id);
+		yield put(deleteMeasurementSuccess());
+		yield put(push(pushTo));
 	} catch (error) {
 		console.log(error);
 	}
@@ -62,10 +69,24 @@ function* requestMeasurementByIdSaga(action: ReturnType<typeof requestMeasuremen
 	try {
 		const {data: measurement} = yield call(getMeasurementByIdRequest, action.payload);
 		yield put(requestMeasurementByIdSuccess(measurement));
-		// console.log('asdasdasdd')
-	} catch (error) {
-		console.log('WOW')
-		console.log(error);
+	} catch (err) {
+		const {status, error} = err.response.data;
+		if (status === 400) {
+			yield put(push('/projects'));
+			store.addNotification({
+				title: `Issue with measurement: ${action.payload}`,
+				message: error,
+				type: 'danger',
+				insert: 'top',
+				container: 'top-right',
+				animationIn: ['animate__animated', 'animate__fadeIn'],
+				animationOut: ['animate__animated', 'animate__fadeOut'],
+				dismiss: {
+					duration: 3000,
+					onScreen: true
+				}
+			});
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 import { ProjectDto } from './dto/project.dto';
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Project } from './project.entity';
 import { PROJECT_REPOSITORY } from 'src/modules/core/constants';
 
@@ -19,8 +19,16 @@ export class ProjectsService {
   }
 
   async getProjectById(id: number): Promise<Project> {
-    return await this.projectRepository
-      .findOne<Project>({ where: { id } });
+    const project =  await this.projectRepository.findOne<Project>({
+      where: { id }
+    })
+    if (!project) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: 'project does not esist'
+      }, HttpStatus.BAD_REQUEST);
+    }
+    return project;
   }
 
   async updateProject(project: ProjectDto): Promise<Project> {

@@ -1,14 +1,16 @@
 import {call, put, select, takeLatest} from 'redux-saga/effects';
 import {push} from 'connected-react-router';
 
-import { getCoords } from './../selectors/analysisSelectors';
+import { getMQDistances } from './../selectors/analysisSelectors';
+import { getLocation } from './../selectors/routerSelectors';
 import { getIsUser } from 'library/common/selectors/authSelectors';
 import { getMeta, getActiveCameraId, getCalibrationRect } from 'library/common/selectors/settingsSelectors';
 import { getCurrentMeasurement } from './../selectors/projectSelectors';
 import { requestCompleteMeasurement } from '../actions/analysisActions';
 import { saveMeasurementDone as saveMeasurementDoneInSettings } from './../actions/settingsActions';
-import { saveMeasurementDone as saveMeasurementDoneInAnalysis} from './../actions/analysisActions';
+import { saveMeasurementDone as saveMeasurementDoneInAnalysis, requestExcelMQs, requestExcelMQsSuccess} from './../actions/analysisActions';
 import { saveCurrentMeasurementRequest, saveCameraSettingsRequest, saveAnalysisRequest } from './../apis/measurement';
+import { excelMQsRequest } from './../apis/projects';
 
 import {AnalysisTypes} from '../types/analysisTypes';
 
@@ -21,7 +23,7 @@ function* requestCompleteMeasurementSaga(action: ReturnType<typeof requestComple
 		const camera = yield select(getActiveCameraId);
 		const rect = yield select(getCalibrationRect);
 		const user = yield select(getIsUser);
-		const coords = yield select(getCoords);
+		const distances = yield select(getMQDistances);
 
 		const newCurrentMeasurement = {...currentMeasurement, ...meta};
 		const {createdAt, updatedAt, ...measurement} = newCurrentMeasurement;
@@ -37,7 +39,7 @@ function* requestCompleteMeasurementSaga(action: ReturnType<typeof requestComple
 
 		yield call(saveCurrentMeasurementRequest, measurement);
 		yield call(saveCameraSettingsRequest, cameraObj);
-		yield call(saveAnalysisRequest, {measurementId: measurement.id, data: coords});
+		yield call(saveAnalysisRequest, {measurementId: measurement.id, data: distances});
 
 		yield put(push(`/projects/${measurement.projectId}`));
 		yield put(saveMeasurementDoneInSettings());
@@ -49,6 +51,18 @@ function* requestCompleteMeasurementSaga(action: ReturnType<typeof requestComple
 
 }
 
+function* requestExcelMQsSaga(action: ReturnType<typeof requestExcelMQs>) {
+	try {
+		const path = yield select(getLocation);
+		const id = path.split('/')[2];
+		const {data: excelMQs} = yield call(excelMQsRequest, id);
+		yield put(requestExcelMQsSuccess(excelMQs));
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 export default function* analysisSaga() {
 	yield takeLatest(AnalysisTypes.REQUEST_COMPLETE_MEASUREMENT, requestCompleteMeasurementSaga);
+	yield takeLatest(AnalysisTypes.REQUEST_EXCEL_MQS, requestExcelMQsSaga);
 }

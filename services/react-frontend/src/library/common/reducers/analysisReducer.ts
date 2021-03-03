@@ -1,3 +1,4 @@
+import { requestExcelMQsSuccess } from './../actions/analysisActions';
 /* eslint-disable import/no-anonymous-default-export */
 import {ActionType, getType} from 'typesafe-actions';
 
@@ -34,6 +35,7 @@ export type AnalysisState = Readonly<{
 	commonSettings: ICommonSettings;
 	coords: ICoord[];
 	eventsStack: any[];
+	excelMQs: any[];
 }>;
 
 const initialState: AnalysisState = {
@@ -58,6 +60,7 @@ const initialState: AnalysisState = {
 	],
 	coords: [],
 	eventsStack: [],
+	excelMQs: [],
 };
 
 export type AnalysisActions = ActionType<typeof actions>;
@@ -97,6 +100,18 @@ export default (state = initialState, action: AnalysisActions): AnalysisState =>
 					if (i !== position) return c;
 					return {...c, colorId: newMqId};
 				}),
+			};
+
+		case getType(actions.saveMeasurementDone):
+			return {
+				...state,
+				coords: [],
+			};
+
+		case getType(actions.requestExcelMQsSuccess):
+			return {
+				...state,
+				excelMQs: action.payload,
 			};
 
 		default:

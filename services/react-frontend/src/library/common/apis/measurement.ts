@@ -9,3 +9,5 @@ export const saveCurrentMeasurementRequest = (data: any) => fetch.put('/measurem
 export const saveCameraSettingsRequest = (data: any) => fetch.post('/cameras', data).then(camera => camera);
 
 export const saveAnalysisRequest = (data: any) => fetch.post('/analysis', data).then(analysis => analysis);
+
+export const deleteMeasurementRequest = (id: number) => fetch.delete(`/measurements/${id}`);

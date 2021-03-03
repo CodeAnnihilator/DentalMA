@@ -22,3 +22,9 @@ export const requestMeasurementById =
 export const requestMeasurementByIdSuccess =
 	createStandardAction(MeasurementTypes.REQUEST_MEASUREMENT_BY_ID_SUCCESS)
 		<object>();
+
+export const editMeasurementNameSuccess =
+	createStandardAction(MeasurementTypes.EDIT_MEASUREMENT_NAME_SUCCESS)
+		<any>();
+
+export const deleteMeasurementSuccess = createStandardAction(MeasurementTypes.DELETE_MEASUREMENT_SUCCESS)();

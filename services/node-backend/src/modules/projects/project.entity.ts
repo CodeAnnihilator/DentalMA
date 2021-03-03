@@ -1,5 +1,7 @@
-import { Table, Model, DataType, Column, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Model, DataType, Column, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
+
 import { User } from '../users/user.entity';
+import { Measurement } from '../measurements/measurement.entity';
 
 @Table
 export class Project extends Model {
@@ -16,5 +18,8 @@ export class Project extends Model {
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasMany(() => Measurement, { onDelete: 'cascade', hooks:true })
+  measurement: Measurement[];
 
 }

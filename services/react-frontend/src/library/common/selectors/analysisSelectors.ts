@@ -9,12 +9,20 @@ export const getActiveControl = (state: RootState) => state.analysis.activeContr
 export const getMqSettings = (state: RootState) => state.analysis.mqSettings;
 export const getActiveMQ = (state: RootState) => state.analysis.activeMQ;
 export const getCoords = (state: RootState) => state.analysis.coords;
+export const getExcelMQs = (state: RootState) => state.analysis.excelMQs;
 
 export const getActiveMQObj = createSelector(
 	[getMqSettings, getActiveMQ],
 	(data, id) => data[id]
 )
 
+export const getColorMQById = createSelector(
+	[getMqSettings, (_: any, id: number) => id],
+	(colors, id) => {
+		const colorObj = colors.find(c => c.id === id);
+		return colorObj ? colorObj.color : 'grey';
+	}
+)
 
 export const getExcelData = createSelector(
 	[getCoords, getCalibration, getMagnification, getMqSettings, getMeta, getXDeviation, getYDeviation],
@@ -40,8 +48,14 @@ export const getExcelData = createSelector(
 			const distance = `${totalMQDistance.toFixed(2)}um`;
 			return {...meta, ...c, distance, percentage};
 		})
-		console.log(mqsWithDistances)
-
 		return mqsWithDistances;
 	}
+)
+
+export const getMQDistances = createSelector(
+	[getExcelData],
+	(data: any) => data.map((o: any) => {
+		const distance = o.distance.split('um')[0];
+		return {colorId: o.id, distance};
+	})
 )
